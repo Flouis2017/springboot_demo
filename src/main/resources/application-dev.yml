@@ -1,0 +1,24 @@
+
+server:
+    port: 2020
+
+spring:
+    datasource:
+        name: dev_db
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://212.64.7.214:3437/springboot_demo?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+        username: root
+        password: 951210
+        platform: mysql
+        type: com.alibaba.druid.pool.DruidDataSource
+        maxActive: 12
+        initialSize: 3
+        maxWait: 60000
+        minIdle: 10
+
+mybatis:
+    type-aliases-package: com.flouis.demo.entity        # 实体类包名
+    mapper-locations: classpath:mybatis-mappers/*.xml   # 映射文件位置
+
+logging:
+    path: /data/springboot_demo/logs

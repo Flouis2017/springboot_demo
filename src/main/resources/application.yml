@@ -1,6 +1,5 @@
+
 spring:
     profiles:
         active: dev
 
-logging:
-    path: /data/springboot_demo/logs
