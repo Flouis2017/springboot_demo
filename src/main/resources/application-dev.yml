@@ -28,5 +28,11 @@ mybatis:
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+pagehelper:
+    helper-dialect: mysql
+    reasonable: true
+    support-methods-arguments: true
+    params: count=countSql
+
 logging:
     path: /data/springboot_demo/logs

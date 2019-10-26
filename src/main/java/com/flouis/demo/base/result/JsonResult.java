@@ -1,4 +1,4 @@
-package com.flouis.demo.base;
+package com.flouis.demo.base.result;
 
 import lombok.Getter;
 import lombok.Setter;
