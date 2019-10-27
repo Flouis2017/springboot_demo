@@ -1,8 +1,7 @@
 package com.flouis.demo.entity;
 
-import lombok.ToString;
+import java.util.Date;
 
-@ToString
 public class SysUser {
     private Long id;
 
@@ -10,15 +9,35 @@ public class SysUser {
 
     private String password;
 
-    private Long roleId;
-
-    private Integer gender;
-
-    private Integer age;
-
     private String avatar;
 
     private String email;
+
+    private Integer gender;
+
+    private Integer state;
+
+    private Date createTime;
+    private String createTimeText;
+
+    private Date updateTime;
+    private String updateTimeText;
+
+    public String getCreateTimeText() {
+        return createTimeText;
+    }
+
+    public void setCreateTimeText(String createTimeText) {
+        this.createTimeText = createTimeText;
+    }
+
+    public String getUpdateTimeText() {
+        return updateTimeText;
+    }
+
+    public void setUpdateTimeText(String updateTimeText) {
+        this.updateTimeText = updateTimeText;
+    }
 
     public Long getId() {
         return id;
@@ -44,30 +63,6 @@ public class SysUser {
         this.password = password == null ? null : password.trim();
     }
 
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public Integer getGender() {
-        return gender;
-    }
-
-    public void setGender(Integer gender) {
-        this.gender = gender;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -82,5 +77,37 @@ public class SysUser {
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

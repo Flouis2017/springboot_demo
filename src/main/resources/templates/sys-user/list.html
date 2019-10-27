@@ -9,6 +9,16 @@
 		<div class="layui-col-md12">
 			<div class="layui-card">
 				<div class="layui-card-body ">
+					<form class="layui-form layui-col-space5">
+						<div class="layui-inline layui-show-xs-block">
+							<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+						</div>
+						<div class="layui-inline layui-show-xs-block">
+							<button class="layui-btn"  lay-submit="" lay-filter="sreach">
+								<i class="layui-icon" title="搜索">&#xe615;</i>
+							</button>
+						</div>
+					</form>
 					<table id="dataTable" class="layui-table layui-form"> </table>
 				</div>
 			</div>
@@ -16,6 +26,21 @@
 	</div>
 </div>
 </body>
+
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+		<button class="layui-btn layui-btn-sm" lay-event="getCheckData">添加</button>
+		<button class="layui-btn layui-btn-sm" lay-event="getCheckData">
+			<i class="layui-icon layui-icon-refresh" title="刷新"></i>
+		</button>
+	</div>
+</script>
+
+<script type="text/html" id="opRow">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 <script type="text/javascript">
 	var dataTable = null;
 
@@ -29,17 +54,38 @@
 			page: true,
 			limit: 2,
 			limits: [2, 4, 6, 8, 10, 20, 50],
+			toolbar: '#toolbar',
+			defaultToolbar: ['filter', 'exports'],
 			response: {
 				statusCode: 1000
 			},
 			cols: [
 				[
-					{field: 'id', title: 'Id', width:80, sort: true, fixed: 'left'},
-					{field: 'username', title: '用户名', width: 100},
-					{field: 'roleId', title: '角色Id', width: 100, align: 'center'},
-					{field: 'gender', title: '性别', width: 100, align: 'center', sort: true},
-					{field: 'age', title: '年龄', width: 100, align: 'center', sort: true},
-					{field: 'email', title: '邮箱', width: 200}
+					{field: 'id', title: 'Id', width: 60, sort: true, fixed: 'left'},
+					{field: 'username', title: '用户名', width: 120},
+					{field: 'gender', title: '性别', width: 80, align: 'center', sort: true,
+						templet: function(row){
+							return row.gender == 1 ? "男" : "女";
+						}
+					},
+					{field: 'state', title: '状态', width: 80, align: 'center',
+						templet: function(row){
+							var stateText = "";
+							switch (row.state) {
+								case 0:
+									stateText = "冻结";
+								case 2:
+									stateText = "删除";
+								default:
+									stateText = "正常";
+							}
+							return stateText;
+						}
+					},
+					{field: 'email', title: '邮箱'},
+					{field: 'createTimeText', title: '添加时间', align: 'center'},
+					{field: 'updateTimeText', title: '更新时间', align: 'center'},
+					{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
 				]
 			]
 		});

@@ -6,15 +6,21 @@
 		<id column="id" jdbcType="BIGINT" property="id"/>
 		<result column="username" jdbcType="VARCHAR" property="username"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
-		<result column="role_id" jdbcType="BIGINT" property="roleId"/>
-		<result column="gender" jdbcType="INTEGER" property="gender"/>
-		<result column="age" jdbcType="INTEGER" property="age"/>
 		<result column="avatar" jdbcType="VARCHAR" property="avatar"/>
 		<result column="email" jdbcType="VARCHAR" property="email"/>
+		<result column="gender" jdbcType="INTEGER" property="gender"/>
+		<result column="state" jdbcType="INTEGER" property="state"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+		<result column="create_time_text" jdbcType="VARCHAR" property="createTimeText"/>
+		<result column="update_time_text" jdbcType="VARCHAR" property="updateTimeText"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, username, password, role_id, gender, age, avatar, email
+		id, username, password, avatar, email, gender, state, create_time, update_time,
+		DATE_FORMAT(create_time, '%Y-%m-%d %T') AS create_time_text,
+		DATE_FORMAT(update_time, '%Y-%m-%d %T') AS update_time_text
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -28,7 +34,8 @@
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
-	<insert id="insertSelective" parameterType="com.flouis.demo.entity.SysUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+	<insert id="insertSelective" parameterType="com.flouis.demo.entity.SysUser"
+			useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		insert into sys_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="username != null">
@@ -37,21 +44,19 @@
 			<if test="password != null">
 				password,
 			</if>
-			<if test="roleId != null">
-				role_id,
-			</if>
-			<if test="gender != null">
-				gender,
-			</if>
-			<if test="age != null">
-				age,
-			</if>
 			<if test="avatar != null">
 				avatar,
 			</if>
 			<if test="email != null">
 				email,
 			</if>
+			<if test="gender != null">
+				gender,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+				create_time, update_time,
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="username != null">
@@ -60,21 +65,19 @@
 			<if test="password != null">
 				#{password,jdbcType=VARCHAR},
 			</if>
-			<if test="roleId != null">
-				#{roleId,jdbcType=BIGINT},
-			</if>
-			<if test="gender != null">
-				#{gender,jdbcType=INTEGER},
-			</if>
-			<if test="age != null">
-				#{age,jdbcType=INTEGER},
-			</if>
 			<if test="avatar != null">
 				#{avatar,jdbcType=VARCHAR},
 			</if>
 			<if test="email != null">
 				#{email,jdbcType=VARCHAR},
 			</if>
+			<if test="gender != null">
+				#{gender,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+				now(), now()
 		</trim>
 		<selectKey keyProperty="id" resultType="long" order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -90,34 +93,33 @@
 			<if test="password != null">
 				password = #{password,jdbcType=VARCHAR},
 			</if>
-			<if test="roleId != null">
-				role_id = #{roleId,jdbcType=BIGINT},
-			</if>
-			<if test="gender != null">
-				gender = #{gender,jdbcType=INTEGER},
-			</if>
-			<if test="age != null">
-				age = #{age,jdbcType=INTEGER},
-			</if>
 			<if test="avatar != null">
 				avatar = #{avatar,jdbcType=VARCHAR},
 			</if>
 			<if test="email != null">
 				email = #{email,jdbcType=VARCHAR},
 			</if>
+			<if test="gender != null">
+				gender = #{gender,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+				update_time = now()
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 
 	<select id="queryList" parameterType="com.flouis.demo.vo.SysUserVo" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List"/>
+		select
+		<include refid="Base_Column_List"/>
 		from sys_user
 		<where>
 			<if test="username != null">
 				and username like concat('%', #{username, jdbcType=VARCHAR}, '%')
 			</if>
-			<if test="age != null">
-				and age = #{age, jdbcType=INTEGER}
+			<if test="state != null">
+				and state = #{state, jdbcType=INTEGER}
 			</if>
 			<if test="gender != null">
 				and gender = #{gender, jdbcType=INTEGER}

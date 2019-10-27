@@ -14,10 +14,6 @@ public class SysUserService {
 	@Autowired
 	private SysUserMapper sysUserMapper;
 
-	public SysUser getById(Long id) {
-		return this.sysUserMapper.selectByPrimaryKey(id);
-	}
-
 	public List<SysUser> queryList(SysUserVo vo) {
 		return this.sysUserMapper.queryList(vo);
 	}

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flouis.demo.mapper.SysRoleMapper">
+
+	<resultMap id="BaseResultMap" type="com.flouis.demo.entity.SysRole">
+		<id column="id" jdbcType="BIGINT" property="id"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, description, create_time, update_time
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_role
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_role
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.flouis.demo.entity.SysRole"
+			useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+				create_time, update_time,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+				now(), now()
+		</trim>
+		<selectKey keyProperty="id" resultType="long" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.flouis.demo.entity.SysRole">
+		update sys_role
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+				update_time = now()
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+</mapper>

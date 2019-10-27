@@ -1,11 +1,13 @@
 package com.flouis.demo.vo;
 
 import com.flouis.demo.util.StringUtil;
+import lombok.ToString;
 
+@ToString
 public class SysUserVo extends SearchVo{
 
 	private String username;
-	private Integer age;
+	private Integer state;
 	private Integer gender;
 
 	public String getUsername() {
@@ -16,12 +18,12 @@ public class SysUserVo extends SearchVo{
 		this.username = username;
 	}
 
-	public Integer getAge() {
-		return age;
+	public Integer getState() {
+		return state;
 	}
 
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 	public Integer getGender() {

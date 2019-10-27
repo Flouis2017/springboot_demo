@@ -6,9 +6,11 @@ spring:
     datasource:
         name: dev_db
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://212.64.7.214:3437/springboot_demo?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+#        url: jdbc:mysql://212.64.7.214:3437/springboot_demo?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+        url: jdbc:mysql://127.0.0.1:3306/springboot_demo?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
         username: root
-        password: 951210
+#        password: 951210
+        password: root
         platform: mysql
         type: com.alibaba.druid.pool.DruidDataSource
         maxActive: 12
