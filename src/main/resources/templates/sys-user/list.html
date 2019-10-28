@@ -64,13 +64,14 @@ layui.use(['table', 'form'], function () {
 		cols: [
 			[
 				{field: 'id', title: 'Id', width: 60, sort: true, fixed: 'left'},
-				{field: 'username', title: '用户名', width: 120},
-				{field: 'gender', title: '性别', width: 80, align: 'center', sort: true,
+				{field: 'username', title: '用户名', width: 120, align: 'center'},
+				{field: 'roleName', title: '角色', align: 'center', width: 120},
+				{field: 'gender', title: '性别', width: 90, align: 'center', sort: true,
 					templet: function(row){
 						return row.gender == 1 ? "男" : "女";
 					}
 				},
-				{field: 'state', title: '状态', width: 80, align: 'center',
+				{field: 'state', title: '状态', align: 'center', width: 90,
 					templet: function(row){
 						var stateText = "";
 						switch (row.state) {
@@ -84,9 +85,9 @@ layui.use(['table', 'form'], function () {
 						return stateText;
 					}
 				},
-				{field: 'email', title: '邮箱'},
+				{field: 'email', title: '邮箱', align: 'center'},
 				{field: 'createTimeText', title: '添加时间', align: 'center'},
-				{field: 'updateTimeText', title: '更新时间', align: 'center'},
+				// {field: 'updateTimeText', title: '更新时间', align: 'center'},
 				{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
 			]
 		]
@@ -111,13 +112,14 @@ layui.use(['table', 'form'], function () {
 			cols: [
 				[
 					{field: 'id', title: 'Id', width: 60, sort: true, fixed: 'left'},
-					{field: 'username', title: '用户名', width: 120},
-					{field: 'gender', title: '性别', width: 80, align: 'center', sort: true,
+					{field: 'username', title: '用户名', width: 120, align: 'center'},
+					{field: 'roleName', title: '角色', align: 'center', width: 120},
+					{field: 'gender', title: '性别', width: 90, align: 'center', sort: true,
 						templet: function(row){
 							return row.gender == 1 ? "男" : "女";
 						}
 					},
-					{field: 'state', title: '状态', width: 80, align: 'center',
+					{field: 'state', title: '状态', align: 'center', width: 90,
 						templet: function(row){
 							var stateText = "";
 							switch (row.state) {
@@ -131,9 +133,9 @@ layui.use(['table', 'form'], function () {
 							return stateText;
 						}
 					},
-					{field: 'email', title: '邮箱'},
+					{field: 'email', title: '邮箱', align: 'center'},
 					{field: 'createTimeText', title: '添加时间', align: 'center'},
-					{field: 'updateTimeText', title: '更新时间', align: 'center'},
+					// {field: 'updateTimeText', title: '更新时间', align: 'center'},
 					{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
 				]
 			]
@@ -145,7 +147,7 @@ layui.use(['table', 'form'], function () {
 	dataTable.on('toolbar(dataTable)', function(obj){
 		switch(obj.event){
 			case 'add':
-				xadmin.open('添加用户','/sys/user/edit', 600, 500);
+				xadmin.open('添加用户','/sys/user/edit', 600, 450);
 				break;
 			case 'refresh':
 				location.reload();
@@ -156,12 +158,12 @@ layui.use(['table', 'form'], function () {
 	// 监听行工具事件
 	dataTable.on('tool(dataTable)', function(row){
 		var data = row.data;
-		if(row.event === 'del'){
+		if (row.event === 'del'){
 			alert("删除的记录id为：" + data.id);
-		} else if(row.event === 'edit'){
+		} else if (row.event === 'edit'){
 			var content = "/sys/user/edit?id=" + data.id + "&username=" + data.username + "&gender=" + data.gender +
-				"&email=" + data.email;
-			xadmin.open("用户编辑", content, 600, 500);
+				"&email=" + data.email + "&roleId=" + data.roleId;
+			xadmin.open("用户编辑", content, 600, 350);
 		}
 	});
 

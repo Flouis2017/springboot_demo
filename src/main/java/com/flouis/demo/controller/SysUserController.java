@@ -1,7 +1,9 @@
 package com.flouis.demo.controller;
 
 import com.flouis.demo.base.result.TableResult;
+import com.flouis.demo.entity.SysRole;
 import com.flouis.demo.entity.SysUser;
+import com.flouis.demo.service.SysRoleService;
 import com.flouis.demo.service.SysUserService;
 import com.flouis.demo.vo.SysUserVo;
 import com.github.pagehelper.Page;
@@ -10,8 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/sys/user")
@@ -20,6 +25,9 @@ public class SysUserController {
 
 	@Autowired
 	private SysUserService sysUserService;
+
+	@Autowired
+	private SysRoleService sysRoleService;
 
 	/**
 	 * @description 列表页
@@ -41,9 +49,14 @@ public class SysUserController {
 		return TableResult.success(page.getTotal(), page.getResult());
 	}
 
+	/**
+	 * @description 编辑页-添加/编辑弹窗
+	 */
 	@RequestMapping("/edit")
-	public String edit(Model model, SysUser sysUser){
-		model.addAttribute("editObj", sysUser);
+	public String edit(Model model, SysUser editObj){
+		List<SysRole> roleList = this.sysRoleService.queryAll();
+		model.addAttribute("roleList", roleList);
+		model.addAttribute("editObj", editObj);
 		return "sys-user/edit";
 	}
 

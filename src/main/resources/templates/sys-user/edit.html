@@ -7,22 +7,26 @@
 <div class="layui-fluid">
 	<div class="layui-row">
 		<form class="layui-form">
-			<input type="hidden" name="id" id="L_id">
+			<input type="hidden" name="id" id="L_id" th:value="${editObj.id}">
 			<div class="layui-form-item">
 				<label for="L_username" class="layui-form-label">
 					<span class="x-red">*&nbsp;</span>用户名
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="L_username" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
+					<input th:value="${editObj.username}" type="text" id="L_username" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">
 					<span class="x-red">*&nbsp;</span>性别
 				</label>
-				<div class="layui-input-block">
+				<div class="layui-input-block" th:if="${editObj.gender == 1 || editObj.gender == null}">
 					<input type="radio" name="gender" lay-skin="primary" value="1" title="男" checked="">
 					<input type="radio" name="gender" lay-skin="primary" value="0" title="女">
+				</div>
+				<div class="layui-input-block" th:if="${editObj.gender} == 0">
+					<input type="radio" name="gender" lay-skin="primary" value="1" title="男">
+					<input type="radio" name="gender" lay-skin="primary" value="0" title="女" checked="">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -30,7 +34,7 @@
 					<span class="x-red">*&nbsp;</span>邮箱
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="L_email" name="email" required="" lay-verify="email" autocomplete="off" class="layui-input">
+					<input type="text" th:value="${editObj.email}" id="L_email" name="email" required="" lay-verify="email" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 
@@ -39,30 +43,37 @@
 					<span class="x-red">*&nbsp;</span>角色
 				</label>
 				<div class="layui-input-block">
-					<input type="radio" name="role" lay-skin="primary" value="1" title="超级管理员" checked="">
-					<input type="radio" name="role" lay-skin="primary" value="2" title="测试">
-					<input type="radio" name="role" lay-skin="primary" value="3" title="其他">
+					<div class="layui-input-inline">
+						<select id="L_role" name="role" lay-verify="required" lay-search="">
+							<option th:each="role: ${roleList}" th:value="${role.id}" th:text="${role.name}" th:if="${role.id} == ${editObj.roleId}" selected="selected" />
+							<option th:each="role: ${roleList}" th:value="${role.id}" th:text="${role.name}" th:if="${role.id} != ${editObj.roleId}" />
+						</select>
+					</div>
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label for="L_pass" class="layui-form-label">
-					<span class="x-red">*&nbsp;</span>密码
-				</label>
-				<div class="layui-input-inline">
-					<input type="password" id="L_pass" name="password" required="" lay-verify="pass" autocomplete="off" class="layui-input">
+
+			<div th:if="${editObj.id} == null">
+				<div class="layui-form-item">
+					<label for="L_pass" class="layui-form-label">
+						<span class="x-red">*&nbsp;</span>密码
+					</label>
+					<div class="layui-input-inline">
+						<input type="password" id="L_pass" name="password" required="" lay-verify="pass" autocomplete="off" class="layui-input">
+					</div>
+					<div class="layui-form-mid layui-word-aux">
+						6到16个字符
+					</div>
 				</div>
-				<div class="layui-form-mid layui-word-aux">
-					6到16个字符
+				<div class="layui-form-item">
+					<label for="L_repass" class="layui-form-label">
+						<span class="x-red">*&nbsp;</span>确认密码
+					</label>
+					<div class="layui-input-inline">
+						<input type="password" id="L_repass" name="repass" required="" lay-verify="repass" autocomplete="off" class="layui-input">
+					</div>
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label for="L_repass" class="layui-form-label">
-					<span class="x-red">*&nbsp;</span>确认密码
-				</label>
-				<div class="layui-input-inline">
-					<input type="password" id="L_repass" name="repass" required="" lay-verify="repass" autocomplete="off" class="layui-input">
-				</div>
-			</div>
+
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label"></label>
 				<button class="layui-btn" lay-filter="save" lay-submit="">保存</button>
@@ -70,13 +81,6 @@
 		</form>
 	</div>
 </div>
-
-<!-- 进行编辑数据回填 todo -->
-<script type="text/javascript" th:inline="javascript">
-var editObj = [[${editObj}]];
-console.log(editObj);
-$('#L_email').val(editObj.email);
-</script>
 
 <script type="text/javascript">
 layui.use(['form', 'layer'], function () {

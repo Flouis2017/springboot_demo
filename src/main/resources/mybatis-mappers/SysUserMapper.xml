@@ -15,12 +15,20 @@
 
 		<result column="create_time_text" jdbcType="VARCHAR" property="createTimeText"/>
 		<result column="update_time_text" jdbcType="VARCHAR" property="updateTimeText"/>
+
+		<result column="role_id" jdbcType="BIGINT" property="roleId"/>
+		<result column="role_name" jdbcType="VARCHAR" property="roleName"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, username, password, avatar, email, gender, state, create_time, update_time,
-		DATE_FORMAT(create_time, '%Y-%m-%d %T') AS create_time_text,
-		DATE_FORMAT(update_time, '%Y-%m-%d %T') AS update_time_text
+		id, username, password, avatar, email, gender, state, create_time, update_time
+	</sql>
+
+	<sql id="Base_Column_List2">
+		su.id, su.username, su.password, su.avatar, su.email, su.gender, su.state, su.create_time, su.update_time,
+		DATE_FORMAT(su.create_time, '%Y-%m-%d %T') AS create_time_text, DATE_FORMAT(su.update_time, '%Y-%m-%d %T') AS update_time_text,
+		(SELECT sr.id FROM sys_role sr INNER JOIN sys_role_user sru WHERE sr.id = sru.role_id AND sru.user_id = su.id) AS role_id,
+		(SELECT sr.name FROM sys_role sr INNER JOIN sys_role_user sru WHERE sr.id = sru.role_id AND sru.user_id = su.id) AS role_name
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -111,9 +119,8 @@
 	</update>
 
 	<select id="queryList" parameterType="com.flouis.demo.vo.SysUserVo" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List"/>
-		from sys_user
+		select <include refid="Base_Column_List2"/>
+		from sys_user su
 		<where>
 			<if test="username != null">
 				and username like concat('%', #{username, jdbcType=VARCHAR}, '%')

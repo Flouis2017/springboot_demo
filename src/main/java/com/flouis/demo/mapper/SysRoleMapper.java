@@ -3,6 +3,8 @@ package com.flouis.demo.mapper;
 import com.flouis.demo.entity.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface SysRoleMapper {
 
@@ -14,4 +16,5 @@ public interface SysRoleMapper {
 
     int updateByPrimaryKeySelective(SysRole record);
 
+	List<SysRole> queryAll();
 }
