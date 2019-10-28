@@ -1,6 +1,7 @@
 package com.flouis.demo.controller;
 
 import com.flouis.demo.base.result.TableResult;
+import com.flouis.demo.entity.SysUser;
 import com.flouis.demo.service.SysUserService;
 import com.flouis.demo.vo.SysUserVo;
 import com.github.pagehelper.Page;
@@ -8,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -40,7 +42,8 @@ public class SysUserController {
 	}
 
 	@RequestMapping("/edit")
-	public String edit(){
+	public String edit(Model model, SysUser sysUser){
+		model.addAttribute("editObj", sysUser);
 		return "sys-user/edit";
 	}
 

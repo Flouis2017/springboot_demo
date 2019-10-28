@@ -5,4 +5,4 @@ spring:
     devtools:
         restart:
             additional-paths: resources/**,static/**,templates/**
-
+            enabled: true

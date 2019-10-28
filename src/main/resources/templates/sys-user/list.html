@@ -9,17 +9,17 @@
 		<div class="layui-col-md12">
 			<div class="layui-card">
 				<div class="layui-card-body ">
-					<form class="layui-form layui-col-space5">
+					<form id="searchForm" class="layui-form layui-col-space5">
 						<div class="layui-inline layui-show-xs-block">
-							<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+							<input type="text" id="usernameSearch" name="usernameSearch" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 						</div>
 						<div class="layui-inline layui-show-xs-block">
-							<button class="layui-btn"  lay-submit="" lay-filter="sreach">
-								<i class="layui-icon" title="搜索">&#xe615;</i>
+							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索">
+								<i class="layui-icon">&#xe615;</i>
 							</button>
 						</div>
 					</form>
-					<table id="dataTable" class="layui-table layui-form"> </table>
+					<table id="dataTable" class="layui-table layui-form" lay-filter="dataTable"></table>
 				</div>
 			</div>
 		</div>
@@ -29,9 +29,9 @@
 
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-		<button class="layui-btn layui-btn-sm" lay-event="getCheckData">添加</button>
-		<button class="layui-btn layui-btn-sm" lay-event="getCheckData">
-			<i class="layui-icon layui-icon-refresh" title="刷新"></i>
+		<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+		<button class="layui-btn layui-btn-sm" lay-event="refresh" title="刷新">
+			<i class="layui-icon layui-icon-refresh"></i>
 		</button>
 	</div>
 </script>
@@ -42,18 +42,67 @@
 </script>
 
 <script type="text/javascript">
-	var dataTable = null;
+// 计算数据表格高度
+var height = $(window).height() - $('#searchForm').height() - 75;
 
-	layui.use(['table'], function () {
-		dataTable = layui.table;
+layui.use(['table', 'form'], function () {
+	var dataTable = layui.table;
+	var searchForm = layui.form;
 
+	dataTable.render({
+		elem: '#dataTable',
+		height: height,
+		url: '/sys/user/list.json',
+		page: true,
+		limit: 10,
+		limits: [10, 20, 50],
+		toolbar: '#toolbar',
+		defaultToolbar: ['filter', 'exports'],
+		response: {
+			statusCode: 1000
+		},
+		cols: [
+			[
+				{field: 'id', title: 'Id', width: 60, sort: true, fixed: 'left'},
+				{field: 'username', title: '用户名', width: 120},
+				{field: 'gender', title: '性别', width: 80, align: 'center', sort: true,
+					templet: function(row){
+						return row.gender == 1 ? "男" : "女";
+					}
+				},
+				{field: 'state', title: '状态', width: 80, align: 'center',
+					templet: function(row){
+						var stateText = "";
+						switch (row.state) {
+							case 0:
+								stateText = "冻结";
+							case 2:
+								stateText = "删除";
+							default:
+								stateText = "正常";
+						}
+						return stateText;
+					}
+				},
+				{field: 'email', title: '邮箱'},
+				{field: 'createTimeText', title: '添加时间', align: 'center'},
+				{field: 'updateTimeText', title: '更新时间', align: 'center'},
+				{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
+			]
+		]
+	});
+
+	searchForm.on("submit(search)", function (data) {
 		dataTable.render({
 			elem: '#dataTable',
-			height: 312,
+			height: height,
 			url: '/sys/user/list.json',
 			page: true,
-			limit: 2,
-			limits: [2, 4, 6, 8, 10, 20, 50],
+			where: {
+				username: $.trim(data.field.usernameSearch)
+			},
+			limit: 10,
+			limits: [10, 20, 50],
 			toolbar: '#toolbar',
 			defaultToolbar: ['filter', 'exports'],
 			response: {
@@ -89,8 +138,34 @@
 				]
 			]
 		});
+		return false;
 	});
 
+	// 监听头工具栏事件
+	dataTable.on('toolbar(dataTable)', function(obj){
+		switch(obj.event){
+			case 'add':
+				xadmin.open('添加用户','/sys/user/edit', 600, 500);
+				break;
+			case 'refresh':
+				location.reload();
+				break;
+		}
+	});
+
+	// 监听行工具事件
+	dataTable.on('tool(dataTable)', function(row){
+		var data = row.data;
+		if(row.event === 'del'){
+			alert("删除的记录id为：" + data.id);
+		} else if(row.event === 'edit'){
+			var content = "/sys/user/edit?id=" + data.id + "&username=" + data.username + "&gender=" + data.gender +
+				"&email=" + data.email;
+			xadmin.open("用户编辑", content, 600, 500);
+		}
+	});
+
+});
 
 </script>
 </html>
