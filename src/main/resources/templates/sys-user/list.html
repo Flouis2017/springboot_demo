@@ -2,6 +2,7 @@
 <html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<header th:replace="common/header::html"></header>
+	<script th:src="@{/js/common.js}"></script>
 </head>
 <body>
 <div class="layui-fluid">
@@ -11,7 +12,7 @@
 				<div class="layui-card-body ">
 					<form id="searchForm" class="layui-form layui-col-space5">
 						<div class="layui-inline layui-show-xs-block">
-							<input type="text" id="usernameSearch" name="usernameSearch" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+							<input type="text" id="username" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 						</div>
 						<div class="layui-inline layui-show-xs-block">
 							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索">
@@ -42,6 +43,10 @@
 </script>
 
 <script type="text/javascript">
+function getParamObj(){
+	return $('#searchForm').serializeObject();
+}
+
 // 计算数据表格高度
 var height = $(window).height() - $('#searchForm').height() - 75;
 
@@ -53,9 +58,11 @@ layui.use(['table', 'form'], function () {
 		elem: '#dataTable',
 		height: height,
 		url: '/sys/user/list.json',
-		page: true,
-		limit: 10,
-		limits: [10, 20, 50],
+		page: {
+			// curr: 1, // 当前页码，默认值是1
+			limit: 2,
+			limits: [2, 4, 10, 20, 50]
+		},
 		toolbar: '#toolbar',
 		defaultToolbar: ['filter', 'exports'],
 		response: {
@@ -94,52 +101,8 @@ layui.use(['table', 'form'], function () {
 	});
 
 	searchForm.on("submit(search)", function (data) {
-		dataTable.render({
-			elem: '#dataTable',
-			height: height,
-			url: '/sys/user/list.json',
-			page: true,
-			where: {
-				username: $.trim(data.field.usernameSearch)
-			},
-			limit: 10,
-			limits: [10, 20, 50],
-			toolbar: '#toolbar',
-			defaultToolbar: ['filter', 'exports'],
-			response: {
-				statusCode: 1000
-			},
-			cols: [
-				[
-					{field: 'id', title: 'Id', width: 60, sort: true, fixed: 'left'},
-					{field: 'username', title: '用户名', width: 120, align: 'center'},
-					{field: 'roleName', title: '角色', align: 'center', width: 120},
-					{field: 'gender', title: '性别', width: 90, align: 'center', sort: true,
-						templet: function(row){
-							return row.gender == 1 ? "男" : "女";
-						}
-					},
-					{field: 'state', title: '状态', align: 'center', width: 90,
-						templet: function(row){
-							var stateText = "";
-							switch (row.state) {
-								case 0:
-									stateText = "冻结";
-								case 2:
-									stateText = "删除";
-								default:
-									stateText = "正常";
-							}
-							return stateText;
-						}
-					},
-					{field: 'email', title: '邮箱', align: 'center'},
-					{field: 'createTimeText', title: '添加时间', align: 'center'},
-					// {field: 'updateTimeText', title: '更新时间', align: 'center'},
-					{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
-				]
-			]
-		});
+		// data是form表单数据
+		tableReloadFirst("dataTable", getParamObj());
 		return false;
 	});
 
@@ -168,6 +131,5 @@ layui.use(['table', 'form'], function () {
 	});
 
 });
-
 </script>
 </html>

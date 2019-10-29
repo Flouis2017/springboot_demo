@@ -1,5 +1,6 @@
 package com.flouis.demo.controller;
 
+import com.flouis.demo.base.result.JsonResult;
 import com.flouis.demo.base.result.TableResult;
 import com.flouis.demo.entity.SysRole;
 import com.flouis.demo.entity.SysUser;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +60,16 @@ public class SysUserController {
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("editObj", editObj);
 		return "sys-user/edit";
+	}
+
+	/**
+	 * @description 编辑/添加 保存
+	 * @return com.flouis.demo.base.result.JsonResult
+	 */
+	@PostMapping("/save")
+	@ResponseBody
+	public JsonResult save(@RequestBody SysUser sysUser){
+		return this.sysUserService.save(sysUser);
 	}
 
 }

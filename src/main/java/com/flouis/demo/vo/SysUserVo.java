@@ -7,7 +7,6 @@ import lombok.ToString;
 public class SysUserVo extends SearchVo{
 
 	private String username;
-	private Integer state;
 	private Integer gender;
 
 	public String getUsername() {
@@ -16,14 +15,6 @@ public class SysUserVo extends SearchVo{
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
 	}
 
 	public Integer getGender() {

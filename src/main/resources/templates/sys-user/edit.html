@@ -9,11 +9,12 @@
 		<form class="layui-form">
 			<input type="hidden" name="id" id="L_id" th:value="${editObj.id}">
 			<div class="layui-form-item">
-				<label for="L_username" class="layui-form-label">
+				<label class="layui-form-label">
 					<span class="x-red">*&nbsp;</span>用户名
 				</label>
 				<div class="layui-input-inline">
-					<input th:value="${editObj.username}" type="text" id="L_username" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
+					<input th:value="${editObj.username}" th:if="${editObj.id == null}" type="text" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
+					<input th:value="${editObj.username}" th:if="${editObj.id != null}" readonly="readonly" type="text" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -44,7 +45,7 @@
 				</label>
 				<div class="layui-input-block">
 					<div class="layui-input-inline">
-						<select id="L_role" name="role" lay-verify="required" lay-search="">
+						<select id="L_role" name="roleId" lay-verify="required" lay-search="">
 							<option th:each="role: ${roleList}" th:value="${role.id}" th:text="${role.name}" th:if="${role.id} == ${editObj.roleId}" selected="selected" />
 							<option th:each="role: ${roleList}" th:value="${role.id}" th:text="${role.name}" th:if="${role.id} != ${editObj.roleId}" />
 						</select>
@@ -58,7 +59,7 @@
 						<span class="x-red">*&nbsp;</span>密码
 					</label>
 					<div class="layui-input-inline">
-						<input type="password" id="L_pass" name="password" required="" lay-verify="pass" autocomplete="off" class="layui-input">
+						<input type="password" id="L_pass" name="password" required="" lay-verify="password" autocomplete="off" class="layui-input">
 					</div>
 					<div class="layui-form-mid layui-word-aux">
 						6到16个字符
@@ -88,7 +89,7 @@ layui.use(['form', 'layer'], function () {
 
 	//自定义验证规则
 	form.verify({
-		pass: [/(.+){6,12}$/, '密码必须6到12位'],
+		password: [/(.+){6,12}$/, '密码必须6到12位'],
 		repass: function (value) {
 			if ($('#L_pass').val() != $('#L_repass').val()) {
 				return '两次密码不一致';
@@ -98,13 +99,32 @@ layui.use(['form', 'layer'], function () {
 
 	//监听提交
 	form.on('submit(save)', function (data) {
-		console.log(data.field);
-		//发异步，把数据提交给php
-		layer.alert("保存成功", { icon: 6 }, function () {
-			// 关闭当前frame
-			xadmin.close();
-			// 可以父窗口进行刷新
-			xadmin.father_reload();
+		var sysUserId = $('#L_id').val();
+		$.ajax({
+			contentType: "application/json;charset=UTF-8",
+			url: "/sys/user/save",
+			type: "post",
+			dataType: "json",
+			data: JSON.stringify(data.field),
+			success: function (res) {
+				if (res.flag){
+					layer.alert("保存成功", {icon: 6}, function () {
+						// 关闭当前frame
+						xadmin.close();
+						// 可以父窗口进行刷新
+						if (sysUserId == "" || sysUserId == null || sysUserId == undefined){
+							xadmin.father_reload();
+						} else {
+							window.parent.tableReloadCurr("dataTable", window.parent.getParamObj());
+						}
+					});
+				} else {
+					layer.msg(res.msg, {icon: 5});
+				}
+			},
+			error: function () {
+				layer.msg('Network Error! Please try again later.', {icon: 0});
+			}
 		});
 		return false;
 	});

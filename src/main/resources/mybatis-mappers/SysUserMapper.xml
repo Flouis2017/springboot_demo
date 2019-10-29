@@ -122,16 +122,24 @@
 		select <include refid="Base_Column_List2"/>
 		from sys_user su
 		<where>
+			state = 1
 			<if test="username != null">
 				and username like concat('%', #{username, jdbcType=VARCHAR}, '%')
-			</if>
-			<if test="state != null">
-				and state = #{state, jdbcType=INTEGER}
 			</if>
 			<if test="gender != null">
 				and gender = #{gender, jdbcType=INTEGER}
 			</if>
 		</where>
+	</select>
+
+	<select id="queryByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_user where username = #{username}
+	</select>
+
+	<select id="queryByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_user where email = #{email}
 	</select>
 
 </mapper>
