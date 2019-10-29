@@ -8,6 +8,7 @@ import com.flouis.demo.mapper.SysUserMapper;
 import com.flouis.demo.vo.SysUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class SysUserService {
 		return this.sysUserMapper.queryList(vo);
 	}
 
+	@Transactional
 	public JsonResult save(SysUser sysUser) {
 		try {
 			Long userId = sysUser.getId();
@@ -61,6 +63,19 @@ public class SysUserService {
 				newRecord.setUserId(sysUser.getId());
 				this.sysRoleUserMapper.insert(newRecord);
 			}
+			return JsonResult.success("操作成功");
+		} catch (Exception e){
+			e.printStackTrace();
+			return JsonResult.fail("服务器异常，操作失败！");
+		}
+	}
+
+	public JsonResult changeState(Long id, Integer state) {
+		try {
+			SysUser upObj = new SysUser();
+			upObj.setId(id);
+			upObj.setState(state);
+			this.sysUserMapper.updateByPrimaryKeySelective(upObj);
 			return JsonResult.success("操作成功");
 		} catch (Exception e){
 			e.printStackTrace();

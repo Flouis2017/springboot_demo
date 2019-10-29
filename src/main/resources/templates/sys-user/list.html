@@ -80,16 +80,9 @@ layui.use(['table', 'form'], function () {
 				},
 				{field: 'state', title: '状态', align: 'center', width: 90,
 					templet: function(row){
-						var stateText = "";
-						switch (row.state) {
-							case 0:
-								stateText = "冻结";
-							case 2:
-								stateText = "删除";
-							default:
-								stateText = "正常";
-						}
-						return stateText;
+						var buttonStr = row.state == 1 ? '<a style="color: #009688; font-weight: bold; cursor: pointer" onclick="changeState(' + row.id + ', 0)">正常</a>' :
+							'<a style="color: #4E5465; font-weight: bold; cursor: pointer" onclick="changeState(' + row.id + ', 1)">冻结</a>';
+						return buttonStr;
 					}
 				},
 				{field: 'email', title: '邮箱', align: 'center'},
@@ -122,7 +115,7 @@ layui.use(['table', 'form'], function () {
 	dataTable.on('tool(dataTable)', function(row){
 		var data = row.data;
 		if (row.event === 'del'){
-			alert("删除的记录id为：" + data.id);
+			changeState(data.id, 2);
 		} else if (row.event === 'edit'){
 			var content = "/sys/user/edit?id=" + data.id + "&username=" + data.username + "&gender=" + data.gender +
 				"&email=" + data.email + "&roleId=" + data.roleId;
@@ -131,5 +124,35 @@ layui.use(['table', 'form'], function () {
 	});
 
 });
+
+// 更改状态（删除不进行物理删除而是逻辑删除）
+function changeState(id, state){
+	var tip = state == 0 ? "冻结" : ( state == 2 ? "删除" : "开放" );
+	layer.confirm("确定" + tip + "该用户吗", function (index) {
+		layer.close(index);
+		if (id == null || id == undefined || id == ""){
+			layer.msg("主键为空，无法" + tip + "！", {icon:5, time:2000});
+		} else {
+			$.ajax({
+				type: 'post',
+				url	: '/sys/user/changeState',
+				data: { id: id, state: state },
+				dataType: 'json',
+				success: function (res) {
+					if (res.flag){
+						layer.msg(res['msg'], {icon:6, time:2000});
+						state == 2 ? tableReloadFirst("dataTable", getParamObj()) : tableReloadCurr("dataTable", getParamObj());
+					} else {
+						layer.msg(res['msg'], {icon:5, time:2000});
+					}
+				},
+				error: function () {
+					layer.msg("Network Error! Please try again later!", {icon: 5, time: 2000});
+				}
+			});
+		}
+	});
+}
+
 </script>
 </html>

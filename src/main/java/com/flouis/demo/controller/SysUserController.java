@@ -72,4 +72,15 @@ public class SysUserController {
 		return this.sysUserService.save(sysUser);
 	}
 
+	/**
+	 * @description 修改状态：冻结/开放/（逻辑）删除
+	 * @param id 用户id
+	 * @param state 修改之后的状态
+	 */
+	@PostMapping("/changeState")
+	@ResponseBody
+	public JsonResult changeState(Long id, Integer state){
+		return this.sysUserService.changeState(id, state);
+	}
+
 }
