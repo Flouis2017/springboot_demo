@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<header th:replace="common/header::html"></header>
+</head>
+<body>
+
+	<button onclick="reqGet()">AjaxGet</button>
+	<button onclick="reqPost()">AjaxPost</button>
+	<button onclick="reqPost2()">AjaxPost2</button>
+</body>
+<script type="text/javascript">
+	var sysRole = {
+		id: 123,
+		name: "根管理员",
+		description: "也即超级管理员"
+	};
+	function reqGet(){
+		$.ajax({
+			contentType: "application/json;charset=UTF-8",
+			url: "/test/requestBody?{\"id\": 123,\"name\": \"根管理员\",\"description\": \"也即超级管理员\"}",
+			type: "get",
+			dataType: "json",
+			success: function (res) {
+				console.log(res);
+			}
+		});
+	}
+
+	function reqPost() {
+		$.ajax({
+			contentType: "application/json;charset=UTF-8",
+			url: "/test/requestBody",
+			type: "post",
+			dataType: "json",
+			data: JSON.stringify(sysRole),
+			success: function (res) {
+				console.log(res);
+			}
+		});
+	}
+	function reqPost2() {
+		$.ajax({
+			// contentType: "application/json;charset=UTF-8",
+			// url: "/test/requestBody",
+			url: "/test/requestBody2",
+			type: "post",
+			dataType: "json",
+			// data: {id: 12, name: "根管理员", description: "也即超级管理员"},
+			data: sysRole,
+			success: function (res) {
+				console.log(res);
+			}
+		});
+	}
+</script>
+</html>
