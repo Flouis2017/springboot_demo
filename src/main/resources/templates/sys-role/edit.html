@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<header th:replace="common/header::html"></header>
+	<!-- 引入ztree相关js和css -->
+	<link rel="stylesheet" th:href="@{/ztree/css/zTreeStyle/zTreeStyle.css}">
+	<link rel="stylesheet" th:href="@{/ztree/css/demo.css}">
+	<script type="text/javascript" th:src="@{/ztree/js/jquery.ztree.all.min.js}"></script>
+	<script type="text/javascript" th:src="@{/ztree/js/ztree-permission.js}"></script>
+</head>
+<body>
+<div class="layui-fluid">
+	<div class="layui-row">
+		<form class="layui-form">
+			<input type="hidden" name="id" id="L_id" th:value="${editObj.id}">
+			<div class="layui-form-item">
+				<label class="layui-form-label">
+					<span class="x-red">*&nbsp;</span>角色名
+				</label>
+				<div class="layui-input-inline">
+					<input style="width: 150px" th:value="${editObj.name}" type="text" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="L_description" class="layui-form-label">&nbsp;描述</label>
+				<div class="layui-input-inline">
+					<input style="width: 200px" type="text" th:value="${editObj.description}" id="L_description" name="description" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="col-md-2 control-label layui-form-label">权限</label>
+				<div class="col-md-10">
+					<ul id="tree" class="ztree"></ul>
+				</div>
+			</div>
+
+			<div class="layui-form-item" style="text-align: center">
+				<button class="layui-btn" lay-filter="save" lay-submit="">保存</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+layui.use(['form', 'layer'], function () {
+	var form = layui.form, layer = layui.layer;
+
+	//监听提交
+	form.on('submit(save)', function (data) {
+		var id = $('#L_id').val();
+		data.field.permissionIds = getCheckedIds("tree");
+		$.ajax({
+			contentType: "application/json;charset=UTF-8",
+			url: "/sys/role/save",
+			type: "post",
+			dataType: "json",
+			data: JSON.stringify(data.field),
+			success: function (res) {
+				if (res.flag){
+					layer.alert("保存成功", {icon: 6}, function () {
+						// 关闭当前frame
+						xadmin.close();
+						// 可以父窗口进行刷新
+						if (id == "" || id == null || id == undefined){
+							xadmin.father_reload();
+						} else {
+							window.parent.tableReloadCurr("dataTable", window.parent.getParamObj());
+						}
+					});
+				} else {
+					layer.msg(res.msg, {icon: 5});
+				}
+			},
+			error: function () {
+				layer.msg('Network Error! Please try again later.', {icon: 0});
+			}
+		});
+		return false;
+	});
+});
+
+var setting = {};
+var zNodes = {
+	id: 0,
+	name: "权限树",
+	open: true,
+	children: [
+		{
+			id: 1,
+			name:"test1",
+			open:true,
+			children:[
+				{id: 2, name:"test1_1"},
+				{id: 3, name:"test1_2"}
+			]
+		},
+		{
+			id: 4,
+			name:"test2",
+			open:true,
+			children:[
+				{id: 5, name:"test2_1"},
+				{id: 6, name:"test2_2"}
+			]
+		}
+	]
+};
+
+// 初始化权限树
+// $.fn.zTree.init($("#tree"), getSetting(false), getPermissionTree());
+$.fn.zTree.init($("#tree"), getSetting(false), zNodes);
+
+</script>
+</body>
+</html>

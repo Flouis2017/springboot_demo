@@ -10,8 +10,26 @@ public class SysRole {
     private String description;
 
     private Date createTime;
+    private String createTimeText;
 
     private Date updateTime;
+    private String updateTimeText;
+
+    public String getCreateTimeText() {
+        return createTimeText;
+    }
+
+    public void setCreateTimeText(String createTimeText) {
+        this.createTimeText = createTimeText;
+    }
+
+    public String getUpdateTimeText() {
+        return updateTimeText;
+    }
+
+    public void setUpdateTimeText(String updateTimeText) {
+        this.updateTimeText = updateTimeText;
+    }
 
     public Long getId() {
         return id;

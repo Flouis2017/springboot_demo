@@ -8,10 +8,15 @@
 		<result column="description" jdbcType="VARCHAR" property="description"/>
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+
+		<result column="create_time_text" jdbcType="VARCHAR" property="createTimeText"/>
+		<result column="update_time_text" jdbcType="VARCHAR" property="updateTimeText"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, name, description, create_time, update_time
+		id, name, description, create_time, update_time,
+		DATE_FORMAT(create_time, '%Y-%m-%d %T') AS create_time_text,
+		DATE_FORMAT(update_time, '%Y-%m-%d %T') AS update_time_text
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -68,6 +73,16 @@
 	<select id="queryAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
 		from sys_role
+	</select>
+
+	<select id="queryList" parameterType="com.flouis.demo.vo.SysRoleVo" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_role
+		<where>
+			<if test="name != null">
+				and name like concat('%', #{name, jdbcType=VARCHAR}, '%')
+			</if>
+		</where>
 	</select>
 
 </mapper>
