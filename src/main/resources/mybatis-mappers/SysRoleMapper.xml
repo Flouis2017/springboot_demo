@@ -85,4 +85,9 @@
 		</where>
 	</select>
 
+	<select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_role where name = #{name}
+	</select>
+
 </mapper>

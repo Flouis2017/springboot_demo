@@ -18,7 +18,7 @@
 					<span class="x-red">*&nbsp;</span>角色名
 				</label>
 				<div class="layui-input-inline">
-					<input style="width: 150px" th:value="${editObj.name}" type="text" name="username" required="" lay-verify="required" autocomplete="off" class="layui-input">
+					<input style="width: 150px" th:value="${editObj.name}" type="text" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -43,12 +43,12 @@
 </div>
 
 <script type="text/javascript">
+var id = $('#L_id').val();
 layui.use(['form', 'layer'], function () {
 	var form = layui.form, layer = layui.layer;
 
 	//监听提交
 	form.on('submit(save)', function (data) {
-		var id = $('#L_id').val();
 		data.field.permissionIds = getCheckedIds("tree");
 		$.ajax({
 			contentType: "application/json;charset=UTF-8",
@@ -108,9 +108,11 @@ var zNodes = {
 };
 
 // 初始化权限树
-// $.fn.zTree.init($("#tree"), getSetting(false), getPermissionTree());
-$.fn.zTree.init($("#tree"), getSetting(false), zNodes);
-
+var zTree = $.fn.zTree.init($("#tree"), getSetting(false), getPermissionTree());
+// $.fn.zTree.init($("#tree"), getSetting(false), zNodes);
+if (id != "" && id != null && id != undefined){
+	showChecked(id, zTree);
+}
 </script>
 </body>
 </html>

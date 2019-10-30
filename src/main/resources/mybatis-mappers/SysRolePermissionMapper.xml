@@ -37,4 +37,20 @@
 			</if>
 		</trim>
 	</insert>
+
+	<delete id="deleteByRoleId" parameterType="java.lang.Long">
+		delete from sys_role_permission where role_id = #{roleId}
+	</delete>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into sys_role_permission(role_id, permission_id) values
+		<foreach collection ="list" item="item" separator ="," index="">
+			(#{item.roleId}, #{item.permissionId})
+		</foreach >
+	</insert>
+
+	<select id="queryByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select role_id, permission_id from sys_role_permission where role_id = #{roleId}
+	</select>
+
 </mapper>

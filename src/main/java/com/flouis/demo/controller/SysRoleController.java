@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -59,8 +60,8 @@ public class SysRoleController {
 	 */
 	@RequestMapping("/save")
 	@ResponseBody
-	public JsonResult save(){
-		return JsonResult.fail("业务代码尚未完善！");
+	public JsonResult save(@RequestBody SysRoleVo vo){
+		return this.sysRoleService.save(vo);
 	}
 
 	/**

@@ -58,7 +58,7 @@ function getPermissionTree() {
 		contentType: "application/json; charset=utf-8",
 		async: false,
 		success: function (res) {
-			console.log(res);
+			// console.log(res);
 			var data = res.data;
 			var length = data.length;
 			var children = [];
@@ -76,8 +76,17 @@ function getPermissionTree() {
  * @description 节点创建-递归
  */
 function createNode(node) {
-	var childNode = [];
-
+	var children = node.children;
+	var length = children.length;
+	if (length == 0){
+		delete node.children;
+		return node;
+	} else {
+		node.open = true;
+		for (var i=0; i<length; i++){
+			createNode(children[i]);
+		}
+	}
 	return node;
 }
 
@@ -94,4 +103,27 @@ function getCheckedIds(treeId) {
 	}
 	ids = ids.substring(0, ids.length -1);
 	return ids;
+}
+
+/**
+ * @description 当编辑操作时回显选中记录
+ */
+function showChecked(roleId, zTree) {
+	$.ajax({
+		type: "get",
+		url: "/sys/permission/getIdListByRoleId?roleId=" + roleId,
+		success: function (res) {
+			var data = res.data;
+			var length = data.length;
+			var id = 0;
+			var node = null;
+			for (var i=0; i<length; i++){
+				id = data[i]['permissionId'];
+				node = zTree.getNodeByParam("id", id);
+				if (node != null){
+					zTree.checkNode(node, true);
+				}
+			}
+		}
+	});
 }
