@@ -8,6 +8,15 @@ public class SysUserVo extends SearchVo{
 
 	private String username;
 	private Integer gender;
+	private Long roleId;
+
+	public Long getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
 
 	public String getUsername() {
 		return StringUtil.getString(this.username);

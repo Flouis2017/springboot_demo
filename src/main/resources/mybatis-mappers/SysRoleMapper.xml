@@ -90,4 +90,11 @@
 		from sys_role where name = #{name}
 	</select>
 
+	<select id="querySysUserCntById" parameterType="java.lang.Long" resultType="int">
+		SELECT COUNT(sr.id) AS cnt
+		FROM sys_role sr INNER JOIN sys_role_user sru ON sr.id = sru.role_id
+		INNER JOIN sys_user su ON sru.user_id = su.id
+		WHERE sr.id = #{id}
+	</select>
+
 </mapper>

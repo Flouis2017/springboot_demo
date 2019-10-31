@@ -9,9 +9,9 @@ $.fn.serializeObject = function () {
 			if (!obj[this.name].push) {
 				obj[this.name] = [obj[this.name]];
 			}
-			obj[this.name].push(this.value || "");
+			obj[this.name].push($.trim(this.value) || "");
 		} else {
-			obj[this.name] = this.value || "";
+			obj[this.name] = $.trim(this.value) || "";
 		}
 	});
 	return obj;

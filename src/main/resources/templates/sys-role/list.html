@@ -175,10 +175,10 @@
 					dataType: 'json',
 					success: function (res) {
 						if (res.flag){
-							layer.msg(res['msg'], {icon:6, time:2000});
-							state == 2 ? tableReloadFirst("dataTable", getParamObj()) : tableReloadCurr("dataTable", getParamObj());
+							layer.msg(res.msg, {icon:6, time:2000});
+							tableReloadFirst("dataTable", getParamObj());
 						} else {
-							layer.msg(res['msg'], {icon:5, time:2000});
+							layer.msg(res.msg, {icon:5, time:3000});
 						}
 					},
 					error: function () {

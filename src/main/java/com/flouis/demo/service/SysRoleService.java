@@ -84,4 +84,24 @@ public class SysRoleService {
 		}
 	}
 
+	public JsonResult del(Long id) {
+		try {
+			if (id == null){
+				return JsonResult.fail("参数出错，操作失败！");
+			}
+			// 判断角色是否绑定用户，若存在绑定需要先进行解绑
+			int cnt = this.sysRoleMapper.querySysUserCntById(id);
+			if (cnt > 0){
+				return JsonResult.fail("请先解绑该角色下的用户，再进行删除！");
+			}
+			// 角色表记录删除
+			this.sysRoleMapper.deleteByPrimaryKey(id);
+			// 角色-权限表记录删除
+			this.sysRolePermissionMapper.deleteByRoleId(id);
+			return JsonResult.success("操作成功");
+		} catch (Exception e){
+			e.printStackTrace();
+			return JsonResult.fail("服务器异常，操作失败！");
+		}
+	}
 }

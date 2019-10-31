@@ -65,10 +65,12 @@ public class SysRoleController {
 	}
 
 	/**
-	 * @description 角色删除
+	 * @description 角色删除(物理删除)
 	 */
+	@RequestMapping("/del")
+	@ResponseBody
 	public JsonResult del(Long id){
-		return JsonResult.fail("业务代码尚未完善！");
+		return this.sysRoleService.del(id);
 	}
 
 }

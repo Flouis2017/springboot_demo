@@ -11,9 +11,18 @@
 			<div class="layui-card">
 				<div class="layui-card-body ">
 					<form id="searchForm" class="layui-form layui-col-space5">
+
 						<div class="layui-inline layui-show-xs-block">
 							<input type="text" id="username" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 						</div>
+
+						<div class="layui-inline layui-show-xs-block" style="width: 140px">
+							<select id="roleSelect" name="roleId">
+								<option value="">所有角色</option>
+								<option th:each="role: ${roleList}" th:value="${role.id}" th:text="${role.name}" />
+							</select>
+						</div>
+
 						<div class="layui-inline layui-show-xs-block">
 							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索">
 								<i class="layui-icon">&#xe615;</i>

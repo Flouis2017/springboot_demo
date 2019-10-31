@@ -23,4 +23,6 @@ public interface SysRoleMapper {
 	List<SysRole> queryList(SysRoleVo vo);
 
 	SysRole queryByName(@Param("name") String name);
+
+	int querySysUserCntById(@Param("id") Long id);
 }

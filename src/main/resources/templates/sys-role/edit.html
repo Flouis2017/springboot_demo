@@ -61,11 +61,11 @@ layui.use(['form', 'layer'], function () {
 					layer.alert("保存成功", {icon: 6}, function () {
 						// 关闭当前frame
 						xadmin.close();
-						// 可以父窗口进行刷新
-						if (id == "" || id == null || id == undefined){
-							xadmin.father_reload();
-						} else {
+						// 编辑成功后在当前页刷新，添加成功后直接刷新整个父页面
+						if (id != "" && id != null && id != undefined){
 							window.parent.tableReloadCurr("dataTable", window.parent.getParamObj());
+						} else {
+							xadmin.father_reload();
 						}
 					});
 				} else {
@@ -80,6 +80,7 @@ layui.use(['form', 'layer'], function () {
 	});
 });
 
+/* // 树形demo
 var setting = {};
 var zNodes = {
 	id: 0,
@@ -106,10 +107,13 @@ var zNodes = {
 		}
 	]
 };
+$.fn.zTree.init($("#tree"), getSetting(false), zNodes);*/
+
 
 // 初始化权限树
 var zTree = $.fn.zTree.init($("#tree"), getSetting(false), getPermissionTree());
-// $.fn.zTree.init($("#tree"), getSetting(false), zNodes);
+
+// 如果是编辑操作需要将权限勾选回显
 if (id != "" && id != null && id != undefined){
 	showChecked(id, zTree);
 }

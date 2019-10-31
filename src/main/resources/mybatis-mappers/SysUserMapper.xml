@@ -26,9 +26,7 @@
 
 	<sql id="Base_Column_List2">
 		su.id, su.username, su.password, su.avatar, su.email, su.gender, su.state, su.create_time, su.update_time,
-		DATE_FORMAT(su.create_time, '%Y-%m-%d %T') AS create_time_text, DATE_FORMAT(su.update_time, '%Y-%m-%d %T') AS update_time_text,
-		(SELECT sr.id FROM sys_role sr INNER JOIN sys_role_user sru WHERE sr.id = sru.role_id AND sru.user_id = su.id) AS role_id,
-		(SELECT sr.name FROM sys_role sr INNER JOIN sys_role_user sru WHERE sr.id = sru.role_id AND sru.user_id = su.id) AS role_name
+		DATE_FORMAT(su.create_time, '%Y-%m-%d %T') AS create_time_text, DATE_FORMAT(su.update_time, '%Y-%m-%d %T') AS update_time_text
 	</sql>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -113,8 +111,10 @@
 	</update>
 
 	<select id="queryList" parameterType="com.flouis.demo.vo.SysUserVo" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List2"/>
-		from sys_user su
+		select <include refid="Base_Column_List2"/>,
+		sr.id as role_id, sr.name as role_name
+		from sys_user su inner join sys_role_user sru on su.id = sru.user_id
+		inner join sys_role sr on sr.id = sru.role_id
 		<where>
 			state != 2
 			<if test="username != null">
@@ -122,6 +122,9 @@
 			</if>
 			<if test="gender != null">
 				and gender = #{gender, jdbcType=INTEGER}
+			</if>
+			<if test="roleId != null">
+				and sru.role_id = #{roleId, jdbcType=BIGINT}
 			</if>
 		</where>
 	</select>

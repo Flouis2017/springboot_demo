@@ -32,14 +32,6 @@ public class SysUserController {
 	private SysRoleService sysRoleService;
 
 	/**
-	 * @description 列表页
-	 */
-	@RequestMapping("/list")
-	public String list(){
-		return "sys-user/list";
-	}
-
-	/**
 	 * @description 列表数据-分页查询
 	 */
 	@RequestMapping("/list.json")
