@@ -18,7 +18,6 @@ function getSetting(isRadioType) {
 			simpleData: {
 				enable: true,
 				idKey: "id",
-				// pIdKey: "pId",
 				pIdKey: "parentId",
 				rootPId: 0
 			}
@@ -46,6 +45,7 @@ function zTreeOnCheck() {
  * @description 获取所有权限-树形结构返回
  */
 function getPermissionTree() {
+	// ztree标准数据结构根节点：
 	var root = {
 		id: 0,
 		name: "权限树",
@@ -59,13 +59,18 @@ function getPermissionTree() {
 		async: false,
 		success: function (res) {
 			// console.log(res);
+
+			// ztree简单数据结构只需返回一个[{id: , parentId: name: ""}, {...}, ...]列表，ztree就会解析该列表构建树形数据
+			root = res.data;
+
+			/* // ztree标准数据结构
 			var data = res.data;
 			var length = data.length;
 			var children = [];
 			for (var i = 0; i < length; i++){
 				children[i] = createNode(data[i]);
 			}
-			root.children = children;
+			root.children = children;*/
 		}
 	});
 
@@ -73,7 +78,7 @@ function getPermissionTree() {
 }
 
 /**
- * @description 节点创建-递归
+ * @description 节点创建-ztree标准数据结构使用
  */
 function createNode(node) {
 	var children = node.children;

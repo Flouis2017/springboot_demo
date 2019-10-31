@@ -1,6 +1,8 @@
 package com.flouis.demo.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.flouis.demo.base.result.JsonResult;
 import com.flouis.demo.entity.SysPermission;
 import com.flouis.demo.entity.SysRolePermission;
@@ -23,9 +25,8 @@ public class SysPermissionService {
 
 	public JsonResult getTree() {
 		List<SysPermission> allList = this.sysPermissionMapper.queryAll();
-		JSONArray tree = new JSONArray();
-		TreeUtil.setPermissionTree(0L, allList, tree);
-		return JsonResult.success(tree);
+//		TreeUtil.setPermissionTree(0L, allList, tree);
+		return JsonResult.success(TreeUtil.getSimplePermissionTree(allList));
 	}
 
 	public List<SysRolePermission> queryByRoleId(Long roleId) {
