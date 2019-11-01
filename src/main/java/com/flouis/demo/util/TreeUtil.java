@@ -15,7 +15,7 @@ import java.util.List;
 public class TreeUtil {
 
 	/**
-	 * @description 设置权限树-使用JDK8新特性递归
+	 * @description 构建权限树-使用JDK8新特性递归，前端使用ztree之前需要再解析——加上open: true并去除叶节点的children属性
 	 */
 	public static void setPermissionTree(Long parentId, List<SysPermission> allList, JSONArray tree){
 		for (SysPermission per : allList){
@@ -47,19 +47,40 @@ public class TreeUtil {
 	}
 
 	/**
-	 * @description 构建权限树
+	 * @description 构建权限树-传统递归-前端使用ztree无需解析，直接使用
 	 */
-	public static ZTree buildPermissionTree(ZTree parent, List<ZTree> zTreeList) {
-		/*List<ZTree> children = Lists.newArrayList();
-		parent.setChildren(children);
-		for (ZTree x : zTreeList){
-			if (x.getParentId().equals(parent.getId())){
-				children.add(x);
+	public static ZTree buildPermissionTree(ZTree tree, List<ZTree> zTreeList) {
+		List<ZTree> rootHair = Lists.newArrayList();
+		tree.setChildren(rootHair);
 
+		// 一级权限设置，实际上，一级权限才是顶级权限，根权限（即id=0L）原本就是“不存在的”
+		for (ZTree x : zTreeList){
+			if (x.getParentId().equals(tree.getId())){
+				rootHair.add(x);
 			}
-		}*/
-		return parent;
+		}
+		genChildren(rootHair, zTreeList);
+		return tree;
 	}
+
+	/**
+	 * @description “生根发芽，枝繁叶茂”
+	 */
+	public static void genChildren(List<ZTree> parentList, List<ZTree> allList){
+		for (ZTree parent : parentList){
+			List<ZTree> children = Lists.newArrayList();
+			for (ZTree node : allList){
+				if (node.getParentId().equals(parent.getId())){
+					children.add(node);
+				}
+			}
+			if (!children.isEmpty()){
+				parent.setChildren(children);
+				genChildren(children, allList);
+			}
+		}
+	}
+
 
 	public static ZTree getZTreeRoot(){
 		return new ZTree(0L, null, "权限树", true, Lists.newArrayList());

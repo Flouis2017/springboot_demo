@@ -1,7 +1,10 @@
 package com.flouis.demo.test;
 
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.DigestUtils;
+
+import java.util.List;
 
 public class CommonTest {
 
@@ -11,6 +14,9 @@ public class CommonTest {
 	public void test(){
 		System.out.println("Hello springboot!");
 		System.out.println(x);
+
+		List<String> list = Lists.newArrayList();
+		System.out.println(list.isEmpty());
 	}
 
 	@Test

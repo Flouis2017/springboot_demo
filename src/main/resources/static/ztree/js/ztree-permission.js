@@ -42,7 +42,7 @@ function zTreeOnCheck() {
 }
 
 /**
- * @description 获取所有权限-树形结构返回
+ * @description 获取权限树数据：简单数据结构(列表)/标准数据结构(Json)
  */
 function getPermissionTree() {
 	// ztree标准数据结构根节点：
@@ -61,9 +61,10 @@ function getPermissionTree() {
 			// console.log(res);
 
 			// ztree简单数据结构只需返回一个[{id: , parentId: name: ""}, {...}, ...]列表，ztree就会解析该列表构建树形数据
+			// 传统递归构建权限树，返回标准数据结构的数据
 			root = res.data;
 
-			/* // ztree标准数据结构
+			/* // 使用JDK8新特性构建权限树(标准数据结构)
 			var data = res.data;
 			var length = data.length;
 			var children = [];
@@ -78,7 +79,7 @@ function getPermissionTree() {
 }
 
 /**
- * @description 节点创建-ztree标准数据结构使用
+ * @description 节点创建-使用JDK8新特性构建权限树(标准数据结构)
  */
 function createNode(node) {
 	var children = node.children;
