@@ -35,7 +35,7 @@
 <script type="text/javascript">
 
 	// 计算数据表格高度
-	var height = $(window).height() - 60;
+	var height = $(window).height() - 80;
 
 	var renderTable;
 	layui.config({base: "/"}).extend({treetable: "treetable-lay/treetable"}).use(['treetable'], function () {
@@ -52,20 +52,27 @@
 				treeLinkage: true,
 				elem: "#dataTable",
 				url: "/sys/permission/queryAll",
-				height: height,
+				height: 'full',
 				toolbar: '#toolbar',
 				defaultToolbar: [],
 				cols: [
 					[
-						{type: "numbers", title: '序号', width: 50},
+						{type: "numbers", title: '序号', width: 40},
 						{field: 'name', title: '名称', width: 200},
 						{field: 'uri', title: '访问资源', align: 'center', width: 400},
-						{field: 'sort', title: '排序',width: 60, align: 'center'},
-						{field: 'permission', title: '资源标识', align: 'center', width: 150},
+						/*{field: 'sort', title: '排序', width: 75, align: 'center', templet: function (row) {
+								var sort = row.sort == null ? "" : row.sort;
+								var content = "<input id='sortInput" + row.id + "' onblur='resort(" + row.id + ")' " +
+									"value='" + sort + "' style='width: 40px' >";
+								return content;
+							}
+						},*/
 						{field: 'type', width: 100, title: '类型', align: 'center', templet: function (row) {
 								return row.type == 1 ? "菜单" : "按钮";
 							}
 						},
+						{field: 'permission', title: '资源标识', align: 'center', width: 150},
+
 						{field: 'op', title:'操作', toolbar: '#opRow', width: 150, fixed: 'right', align: 'center'}
 					]
 				]
@@ -88,7 +95,7 @@
 					}
 					break;
 				case 'add':
-					xadmin.open("权限资源添加", "/sys/permission/edit", 450, 360);
+					xadmin.open("权限资源添加", "/sys/permission/edit", 450, 705);
 					break;
 				case 'refresh':
 					location.reload();
@@ -102,7 +109,7 @@
 			if (row.event === 'del'){
 				del(data.id);
 			} else if (row.event === 'edit'){
-				xadmin.open("权限资源编辑", "/sys/permission/edit?id=" + data.id, 450, 360);
+				xadmin.open("权限资源编辑", "/sys/permission/edit?id=" + data.id, 450, 705);
 			}
 		});
 
@@ -135,6 +142,13 @@
 			}
 		});
 	}
+
+	// 修改排序
+	function resort(id) {
+		// console.log($('#sortInput'+id).val());
+		alert("重排序！");
+	}
+
 
 </script>
 </html>

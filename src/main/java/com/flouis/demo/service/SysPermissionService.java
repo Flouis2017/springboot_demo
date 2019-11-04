@@ -6,8 +6,11 @@ import com.flouis.demo.entity.SysRolePermission;
 import com.flouis.demo.mapper.SysPermissionMapper;
 import com.flouis.demo.mapper.SysRolePermissionMapper;
 import com.flouis.demo.util.TreeUtil;
+import com.flouis.demo.vo.ZTree;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,4 +47,44 @@ public class SysPermissionService {
 	public SysPermission queryById(Long id) {
 		return this.sysPermissionMapper.selectByPrimaryKey(id);
 	}
+
+
+	public JsonResult getParentTree() {
+		List<ZTree> allList = TreeUtil.getSimplePermissionTree(this.sysPermissionMapper.queryAll());
+
+		List<ZTree> resList = Lists.newArrayList();
+		// 二重循环提出叶节点
+		int length = allList.size();
+		for (int i = 0; i < length; i++){
+			ZTree x = allList.get(i);
+			for (int j = 0; j < length; j++){
+				if (i == j){
+					continue;
+				}
+				ZTree y = allList.get(j);
+				if (x.getId().equals(y.getParentId())){
+					resList.add(x);
+					break;
+				}
+			}
+		}
+		return JsonResult.success(resList);
+	}
+
+	@Transactional
+	public JsonResult save(SysPermission saveObj) {
+		try {
+			Long id = saveObj.getId();
+			if (id == null){
+				this.sysPermissionMapper.insertSelective(saveObj);
+			} else {
+				this.sysPermissionMapper.updateByPrimaryKeySelective(saveObj);
+			}
+			return JsonResult.success("保存成功");
+		} catch (Exception e){
+			e.printStackTrace();
+			return JsonResult.fail("服务器异常，保存失！");
+		}
+	}
+
 }

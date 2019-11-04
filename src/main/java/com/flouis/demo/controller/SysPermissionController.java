@@ -7,6 +7,7 @@ import com.flouis.demo.service.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,6 +27,15 @@ public class SysPermissionController {
 	@ResponseBody
 	public JsonResult getTree(){
 		return this.sysPermissionService.getTree();
+	}
+
+	/**
+	 * @description 获取父级权限树，即提出叶节点
+	 */
+	@RequestMapping("/getParentTree")
+	@ResponseBody
+	public JsonResult getParentTree(){
+		return this.sysPermissionService.getParentTree();
 	}
 
 	/**
@@ -60,6 +70,15 @@ public class SysPermissionController {
 		}
 		model.addAttribute("editObj", sysPermission);
 		return "sys-permission/edit";
+	}
+
+	/**
+	 * @description 权限保存
+	 */
+	@RequestMapping("/save")
+	@ResponseBody
+	public JsonResult save(@RequestBody SysPermission saveObj){
+		return this.sysPermissionService.save(saveObj);
 	}
 
 }

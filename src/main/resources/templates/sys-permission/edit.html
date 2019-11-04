@@ -2,18 +2,24 @@
 <html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<header th:replace="common/header::html"></header>
+	<!-- 引入ztree相关js和css -->
+	<link rel="stylesheet" th:href="@{/ztree/css/zTreeStyle/zTreeStyle.css}">
+	<link rel="stylesheet" th:href="@{/ztree/css/demo.css}">
+	<script type="text/javascript" th:src="@{/ztree/js/jquery.ztree.all.min.js}"></script>
+	<script type="text/javascript" th:src="@{/ztree/js/ztree-permission.js}"></script>
 </head>
 <body>
 <div class="layui-fluid">
 	<div class="layui-row">
 		<form class="layui-form">
 			<input type="hidden" name="id" id="L_id" th:value="${editObj.id}">
+			<input type="hidden" name="parentId" id="L_parent_id" th:value="${editObj.parentId}">
 			<div class="layui-form-item">
-				<label class="layui-form-label">
-					<span class="x-red">*&nbsp;</span>父级id
+				<label class="col-md-2 control-label layui-form-label">
+					<span class="x-red">*&nbsp;</span>父级
 				</label>
-				<div class="layui-input-inline">
-					<input style="width: 150px" th:value="${editObj.parentId}" type="text" name="parentId" required="" lay-verify="required" autocomplete="off" class="layui-input">
+				<div class="col-md-10">
+					<ul id="tree" class="ztree"></ul>
 				</div>
 			</div>
 
@@ -31,26 +37,24 @@
 					<span class="x-red">*&nbsp;</span>类型
 				</label>
 				<div class="layui-input-block" th:if="${editObj.type == 1 || editObj.type == null}">
-					<input type="radio" name="gender" lay-skin="primary" value="1" title="菜单" checked="">
-					<input type="radio" name="gender" lay-skin="primary" value="2" title="按钮">
+					<input type="radio" name="type" lay-skin="primary" value="1" title="菜单" checked="">
+					<input type="radio" name="type" lay-skin="primary" value="2" title="按钮">
 				</div>
 				<div class="layui-input-block" th:if="${editObj.type} == 2">
-					<input type="radio" name="gender" lay-skin="primary" value="1" title="菜单">
-					<input type="radio" name="gender" lay-skin="primary" value="2" title="按钮" checked="">
+					<input type="radio" name="type" lay-skin="primary" value="1" title="菜单">
+					<input type="radio" name="type" lay-skin="primary" value="2" title="按钮" checked="">
 				</div>
 			</div>
 
 			<div class="layui-form-item">
-				<label class="layui-form-label">
-					<span class="x-red">*&nbsp;</span>访问资源
-				</label>
+				<label class="layui-form-label">访问资源</label>
 				<div class="layui-input-inline">
-					<input style="width: 200px" type="text" th:value="${editObj.uri}" required="" lay-verify="required" name="uri" autocomplete="off" class="layui-input">
+					<input style="width: 250px" type="text" th:value="${editObj.uri}" name="uri" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 
 			<div class="layui-form-item">
-				<label class="layui-form-label">&nbsp;标识</label>
+				<label class="layui-form-label">资源标识</label>
 				<div class="layui-input-inline">
 					<input style="width: 150px" th:value="${editObj.permission}" type="text" name="permission" autocomplete="off" class="layui-input">
 				</div>
@@ -69,7 +73,7 @@ layui.use(['form', 'layer'], function () {
 
 	//监听提交
 	form.on('submit(save)', function (data) {
-		data.field.permissionIds = getCheckedIds("tree");
+		data.field.parentId = getCheckedIds("tree");
 		$.ajax({
 			contentType: "application/json;charset=UTF-8",
 			url: "/sys/permission/save",
@@ -95,6 +99,11 @@ layui.use(['form', 'layer'], function () {
 		return false;
 	});
 });
+
+// 初始化父级权限树
+var zTree = $.fn.zTree.init($("#tree"), getSetting(true), getPermissionParentTree());
+initParentTree($('#L_parent_id').val(), zTree);
+
 </script>
 </body>
 </html>

@@ -79,6 +79,23 @@ function getPermissionTree() {
 }
 
 /**
+ * @description 获取父级权限树数据
+ */
+function getPermissionParentTree() {
+	var root = null;
+	$.ajax({
+		url: "/sys/permission/getParentTree",
+		type: "get",
+		contentType: "application/json; charset=utf-8",
+		async: false,
+		success: function (res) {
+			root = res.data;
+		}
+	});
+	return root;
+}
+
+/**
  * @description 节点创建-使用JDK8新特性构建权限树(标准数据结构)
  */
 function createNode(node) {
@@ -132,4 +149,23 @@ function showChecked(roleId, zTree) {
 			}
 		}
 	});
+}
+
+/**
+ * @description 单选权限树选中初始化
+ */
+function initParentTree(parentId, zTree) {
+	var node = null;
+	// 如果是添加操作，默认选中根节点作为父级
+	if (parentId == null || parentId == "" || parentId == undefined){
+		node = zTree.getNodeByParam("id", 0);
+		if (node != null){
+			zTree.checkNode(node, true);
+		}
+	} else {
+		node = zTree.getNodeByParam("id", parentId);
+		if (node != null){
+			zTree.checkNode(node, true);
+		}
+	}
 }
