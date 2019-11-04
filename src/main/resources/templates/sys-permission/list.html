@@ -2,7 +2,6 @@
 <html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<header th:replace="common/header::html"></header>
-	<script th:src="@{/js/common.js}"></script>
 </head>
 <body>
 <div class="layui-fluid">
@@ -10,16 +9,6 @@
 		<div class="layui-col-md12">
 			<div class="layui-card">
 				<div class="layui-card-body ">
-					<form id="searchForm" class="layui-form layui-col-space5">
-						<div class="layui-inline layui-show-xs-block">
-							<input type="text" id="name" name="name" placeholder="请输入菜单/权限名" autocomplete="off" class="layui-input">
-						</div>
-						<div class="layui-inline layui-show-xs-block">
-							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索">
-								<i class="layui-icon">&#xe615;</i>
-							</button>
-						</div>
-					</form>
 					<table id="dataTable" class="layui-table layui-form" lay-filter="dataTable"></table>
 				</div>
 			</div>
@@ -30,6 +19,7 @@
 
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
+		<button class="layui-btn layui-btn-sm" id="foldToggleBtn" lay-event="foldToggle">折叠/展开</button>
 		<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
 		<button class="layui-btn layui-btn-sm" lay-event="refresh" title="刷新">
 			<i class="layui-icon layui-icon-refresh"></i>
@@ -43,54 +33,62 @@
 </script>
 
 <script type="text/javascript">
-	function getParamObj(){
-		return $('#searchForm').serializeObject();
-	}
 
 	// 计算数据表格高度
-	var height = $(window).height() - $('#searchForm').height() - 75;
+	var height = $(window).height() - 60;
 
-	layui.use(['table', 'form'], function () {
+	var renderTable;
+	layui.config({base: "/"}).extend({treetable: "treetable-lay/treetable"}).use(['treetable'], function () {
 		var dataTable = layui.table;
-		var searchForm = layui.form;
+		var treetable = layui.treetable;
 
-		dataTable.render({
-			elem: '#dataTable',
-			height: height,
-			url: '/sys/role/list.json',
-			page: {
-				// curr: 1, // 当前页码，默认值是1
-				limit: 2,
-				limits: [2, 4, 10, 20, 50]
-			},
-			toolbar: '#toolbar',
-			defaultToolbar: ['filter', 'exports'],
-			response: {
-				statusCode: 1000
-			},
-			cols: [
-				[
-					{field: 'id', title: 'Id', width: 60, sort: true, fixed: 'left'},
-					{field: 'name', title: '角色', width: 120, align: 'center'},
-					{field: 'description', title: '描述', align: 'center'},
-					{field: 'createTimeText', title: '添加时间', align: 'center'},
-					{field: 'updateTimeText', title: '更新时间', align: 'center'},
-					{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
+		renderTable = function(){
+			treetable.render({
+				// 渲染表格
+				treeColIndex: 1, // 树形角标显示在第几列
+				treeSpid: 0, // 根id(原始父节点id)
+				treeIdName: "id", // id字段
+				treePidName: "parentId", // 父id字段
+				treeLinkage: true,
+				elem: "#dataTable",
+				url: "/sys/permission/queryAll",
+				height: height,
+				toolbar: '#toolbar',
+				defaultToolbar: [],
+				cols: [
+					[
+						{type: "numbers", title: '序号', width: 50},
+						{field: 'name', title: '名称', width: 200},
+						{field: 'uri', title: '访问资源', align: 'center', width: 400},
+						{field: 'sort', title: '排序',width: 60, align: 'center'},
+						{field: 'permission', title: '资源标识', align: 'center', width: 150},
+						{field: 'type', width: 100, title: '类型', align: 'center', templet: function (row) {
+								return row.type == 1 ? "菜单" : "按钮";
+							}
+						},
+						{field: 'op', title:'操作', toolbar: '#opRow', width: 150, fixed: 'right', align: 'center'}
+					]
 				]
-			]
-		});
+			});
+		};
 
-		searchForm.on("submit(search)", function (data) {
-			// data是form表单数据
-			tableReloadFirst("dataTable", getParamObj());
-			return false;
-		});
+		renderTable();
 
 		// 监听头工具栏事件
+		var flag = true;
 		dataTable.on('toolbar(dataTable)', function(obj){
 			switch(obj.event){
+				case 'foldToggle':
+					if (flag){
+						treetable.foldAll("#dataTable");
+						flag = false;
+					} else {
+						treetable.expandAll("#dataTable");
+						flag = true;
+					}
+					break;
 				case 'add':
-					xadmin.open('角色添加','/sys/role/edit', 450, 600);
+					xadmin.open("权限资源添加", "/sys/permission/edit", 450, 360);
 					break;
 				case 'refresh':
 					location.reload();
@@ -104,7 +102,7 @@
 			if (row.event === 'del'){
 				del(data.id);
 			} else if (row.event === 'edit'){
-				xadmin.open("角色编辑", "/sys/role/edit?id=" + data.id, 450, 600);
+				xadmin.open("权限资源编辑", "/sys/permission/edit?id=" + data.id, 450, 360);
 			}
 		});
 
@@ -112,20 +110,20 @@
 
 	// 删除角色（物理删除）
 	function del(id){
-		layer.confirm("确定删除该角色吗", function (index) {
+		layer.confirm("确定删除该记录吗", function (index) {
 			layer.close(index);
 			if (id == null || id == undefined || id == ""){
 				layer.msg("主键为空，无法删除！", {icon:5, time:2000});
 			} else {
 				$.ajax({
 					type: 'post',
-					url	: '/sys/role/del',
+					url	: '/sys/permission/del',
 					data: { id: id },
 					dataType: 'json',
 					success: function (res) {
 						if (res.flag){
 							layer.msg(res.msg, {icon:6, time:2000});
-							tableReloadFirst("dataTable", getParamObj());
+							location.reload();
 						} else {
 							layer.msg(res.msg, {icon:5, time:3000});
 						}

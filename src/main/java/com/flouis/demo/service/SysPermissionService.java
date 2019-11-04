@@ -36,4 +36,12 @@ public class SysPermissionService {
 	public List<SysRolePermission> queryByRoleId(Long roleId) {
 		return this.sysRolePermissionMapper.queryByRoleId(roleId);
 	}
+
+	public List<SysPermission> queryAll() {
+		return this.sysPermissionMapper.queryAll();
+	}
+
+	public SysPermission queryById(Long id) {
+		return this.sysPermissionMapper.selectByPrimaryKey(id);
+	}
 }
