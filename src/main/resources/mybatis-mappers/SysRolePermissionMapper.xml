@@ -53,4 +53,12 @@
 		select role_id, permission_id from sys_role_permission where role_id = #{roleId}
 	</select>
 
+	<delete id="deleteByPermissionId" parameterType="java.lang.Long">
+		delete from sys_role_permission where permission_id = #{permissionId}
+	</delete>
+
+	<select id="getChildrenCnt" parameterType="java.lang.Long" resultType="int">
+		SELECT COUNT(0) AS childrenCnt FROM sys_permission WHERE parent_id = #{parentId}
+	</select>
+
 </mapper>

@@ -19,4 +19,8 @@ public interface SysRolePermissionMapper {
     int batchInsert(List<SysRolePermission> list);
 
     List<SysRolePermission> queryByRoleId(@Param("roleId") Long roleId);
+
+	int deleteByPermissionId(@Param("permissionId") Long permissionId);
+
+    int getChildrenCnt(@Param("parentId") Long parentId);
 }

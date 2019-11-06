@@ -81,4 +81,23 @@ public class SysPermissionController {
 		return this.sysPermissionService.save(saveObj);
 	}
 
+	/**
+	 * @description 判断权限是否包含子权限
+	 * @param id 权限id
+	 */
+	@RequestMapping("/hasChildren")
+	@ResponseBody
+	public JsonResult hasChildren(Long id){
+		return this.sysPermissionService.hasChildren(id);
+	}
+
+	/**
+	 * @description 权限删除
+	 */
+	@RequestMapping("/del")
+	@ResponseBody
+	public JsonResult del(Long id){
+		return this.sysPermissionService.del(id);
+	}
+
 }

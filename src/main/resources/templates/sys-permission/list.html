@@ -34,9 +34,6 @@
 
 <script type="text/javascript">
 
-	// 计算数据表格高度
-	var height = $(window).height() - 80;
-
 	var renderTable;
 	layui.config({base: "/"}).extend({treetable: "treetable-lay/treetable"}).use(['treetable'], function () {
 		var dataTable = layui.table;
@@ -98,7 +95,7 @@
 					xadmin.open("权限资源添加", "/sys/permission/edit", 450, 705);
 					break;
 				case 'refresh':
-					location.reload();
+					renderTable();
 					break;
 			}
 		});
@@ -107,6 +104,22 @@
 		dataTable.on('tool(dataTable)', function(row){
 			var data = row.data;
 			if (row.event === 'del'){
+				var hasChildren = false;
+				// 判断当前权限是否有子权限，如果有子权限需现将其子权限全部删除再进行删除
+				$.ajax({
+					url: "/sys/permission/hasChildren?id=" + data.id,
+					async: false,
+					success: function(res){
+						hasChildren = res.data;
+					},
+					error: function(){
+						layer.msg("Network Error! Please try again later!", {icon: 5, time: 2000});
+					}
+				});
+				if (hasChildren){
+					layer.msg("当前权限资源包含子节点，请先删除子节点再尝试！", {icon:0, time:3000});
+					return;
+				}
 				del(data.id);
 			} else if (row.event === 'edit'){
 				xadmin.open("权限资源编辑", "/sys/permission/edit?id=" + data.id, 450, 705);
@@ -115,7 +128,7 @@
 
 	});
 
-	// 删除角色（物理删除）
+	// 删除权限（物理删除）
 	function del(id){
 		layer.confirm("确定删除该记录吗", function (index) {
 			layer.close(index);
@@ -130,7 +143,7 @@
 					success: function (res) {
 						if (res.flag){
 							layer.msg(res.msg, {icon:6, time:2000});
-							location.reload();
+							renderTable();
 						} else {
 							layer.msg(res.msg, {icon:5, time:3000});
 						}
@@ -142,13 +155,6 @@
 			}
 		});
 	}
-
-	// 修改排序
-	function resort(id) {
-		// console.log($('#sortInput'+id).val());
-		alert("重排序！");
-	}
-
 
 </script>
 </html>

@@ -83,10 +83,10 @@ layui.use(['form', 'layer'], function () {
 			success: function (res) {
 				if (res.flag){
 					layer.alert("保存成功", {icon: 6}, function () {
-						// 关闭当前frame
+						// 关闭当前编辑弹窗
 						xadmin.close();
-						// 操作成功后刷新整个父页面
-						xadmin.father_reload();
+						// 操作成功后刷新表格
+						window.parent.renderTable();
 					});
 				} else {
 					layer.msg(res.msg, {icon: 5});

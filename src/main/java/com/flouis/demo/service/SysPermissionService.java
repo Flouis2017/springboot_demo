@@ -83,8 +83,29 @@ public class SysPermissionService {
 			return JsonResult.success("保存成功");
 		} catch (Exception e){
 			e.printStackTrace();
-			return JsonResult.fail("服务器异常，保存失！");
+			return JsonResult.fail("服务器异常，保存失败！");
 		}
+	}
+
+	@Transactional
+	public JsonResult del(Long id) {
+		try {
+			if (id == null){
+				return JsonResult.fail("该记录不存在，删除失败！");
+			}
+			// 删除sys_permission记录
+			this.sysPermissionMapper.deleteByPrimaryKey(id);
+			// 删除sys_role_permission记录
+			this.sysRolePermissionMapper.deleteByPermissionId(id);
+			return JsonResult.success("删除成功");
+		} catch (Exception e){
+			e.printStackTrace();
+			return JsonResult.fail("服务器异常，删除失败！");
+		}
+	}
+
+	public JsonResult hasChildren(Long id) {
+		return this.sysRolePermissionMapper.getChildrenCnt(id) > 0 ? JsonResult.success(true) : JsonResult.success(false);
 	}
 
 }
