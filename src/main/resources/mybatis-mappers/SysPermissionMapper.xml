@@ -17,6 +17,10 @@
 		id, parent_id, name, css, uri, type, permission, sort
 	</sql>
 
+	<sql id="SP_Base_Column_List">
+		sp.id, sp.parent_id, sp.name, sp.css, sp.uri, sp.type, sp.permission, sp.sort
+	</sql>
+
 	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
 		from sys_permission
@@ -112,6 +116,27 @@
 
 	<select id="queryAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/> from sys_permission
+	</select>
+
+	<select id="queryFirstMenusByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="SP_Base_Column_List"/>
+		FROM sys_permission sp INNER JOIN sys_role_permission srp ON sp.id = srp.permission_id
+		INNER JOIN sys_role_user sru ON sru.role_id = srp.role_id
+		WHERE sp.parent_id = 0 AND sp.type = 1 AND sru.user_id = #{userId}
+	</select>
+
+	<select id="querySecondMenusByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="SP_Base_Column_List"/>
+		FROM sys_permission sp INNER JOIN sys_role_permission srp ON sp.id = srp.permission_id
+		INNER JOIN sys_role_user sru ON sru.role_id = srp.role_id
+		WHERE sp.parent_id != 0 AND sp.type = 1 AND sru.user_id = #{userId}
+	</select>
+
+	<select id="queryListByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="SP_Base_Column_List"/>
+		FROM sys_permission sp INNER JOIN sys_role_permission srp ON sp.id = srp.permission_id
+		INNER JOIN sys_role_user sru ON sru.role_id = srp.role_id
+		WHERE sru.user_id = #{userId}
 	</select>
 
 </mapper>

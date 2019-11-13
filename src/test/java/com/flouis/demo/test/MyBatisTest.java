@@ -1,7 +1,6 @@
 package com.flouis.demo.test;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.flouis.demo.entity.SysPermission;
 import com.flouis.demo.entity.SysUser;
 import com.flouis.demo.mapper.SysPermissionMapper;

@@ -2,6 +2,7 @@ package com.flouis.demo.mapper;
 
 import com.flouis.demo.entity.SysPermission;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,4 +18,10 @@ public interface SysPermissionMapper {
     int updateByPrimaryKeySelective(SysPermission record);
 
 	List<SysPermission> queryAll();
+
+	List<SysPermission> queryFirstMenusByUserId(@Param("userId") Long userId);
+
+	List<SysPermission> querySecondMenusByUserId(@Param("userId") Long userId);
+
+	List<SysPermission> queryListByUserId(@Param("userId") Long userId);
 }

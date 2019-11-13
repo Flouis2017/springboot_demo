@@ -7,9 +7,9 @@ import com.flouis.demo.mapper.SysRoleUserMapper;
 import com.flouis.demo.mapper.SysUserMapper;
 import com.flouis.demo.vo.SysUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -55,8 +55,8 @@ public class SysUserService {
 				if (user != null){
 					return JsonResult.fail("邮箱已被占用！");
 				}
-				// 对密码md5处理
-				sysUser.setPassword(DigestUtils.md5DigestAsHex(sysUser.getPassword().getBytes()));
+				// 对密码使用BCrypt加密处理
+				sysUser.setPassword(new BCryptPasswordEncoder().encode(sysUser.getPassword()));
 				this.sysUserMapper.insertSelective(sysUser);
 				SysRoleUser newRecord = new SysRoleUser();
 				newRecord.setRoleId(roleId);

@@ -108,4 +108,22 @@ public class SysPermissionService {
 		return this.sysRolePermissionMapper.getChildrenCnt(id) > 0 ? JsonResult.success(true) : JsonResult.success(false);
 	}
 
+	/**
+	 * @description 通过用户id获取一级菜单——模块菜单
+	 * @param userId
+	 * @return List<SysPermission>
+	 */
+	public List<SysPermission> getFirstMenus(Long userId) {
+		return this.sysPermissionMapper.queryFirstMenusByUserId(userId);
+	}
+
+	/**
+	 * @description 通过用户id获取二级菜单——页面菜单
+	 * @param userId
+	 * @return List<SysPermission>
+	 */
+	public List<SysPermission> getSecondMenus(Long userId) {
+		return this.sysPermissionMapper.querySecondMenusByUserId(userId);
+	}
+
 }
