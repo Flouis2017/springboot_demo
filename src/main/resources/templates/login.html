@@ -37,7 +37,6 @@
 					url : '/doLogin',
 					data : $("#login-form").serialize(),
 					success : function(res) {
-						console.log(res);
 						if(res.authenticated == true){
 							var userId = res.principal.id;
 							localStorage.setItem("userId", userId);
@@ -51,7 +50,7 @@
 							// layer.msg("登录成功", {time: 500}, function(){});
 							location.href = "/";
 						} else {
-							layer.msg("登录异常，请联系管理员");
+							layer.msg("用户名密码不匹配，登录失败！", {icon: 5, time: 2000});
 						}
 					},
 					error : function(xhr) {

@@ -1,5 +1,6 @@
 package com.flouis.demo.security;
 
+import com.flouis.demo.security.authentication.MyAuthenticationFailureHandler;
 import com.flouis.demo.security.authentication.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private MyAuthenticationSuccessHandler successHandler;
+
+	@Autowired
+	private MyAuthenticationFailureHandler failureHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
@@ -59,7 +63,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin()
 			.loginPage("/login.html")
 			.loginProcessingUrl("/doLogin")
-			.successHandler(successHandler);
+			.successHandler(successHandler)
+			.failureHandler(failureHandler);
 	}
 
 }

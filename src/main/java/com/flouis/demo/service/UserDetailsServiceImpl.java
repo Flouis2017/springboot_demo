@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new LockedException("当前用户已被冻结，请联系超级管理员！");
 		}
 		if (user.getState() == 2){
-			throw new AuthenticationServiceException("当前用户不可用！");
+			throw new DisabledException("当前用户不可用！");
 		}
 
 		LoginUser loginUser = new LoginUser();
