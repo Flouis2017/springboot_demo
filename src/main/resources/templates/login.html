@@ -6,7 +6,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache">
 	<meta http-equiv="Expires" content="0">
 	<title>登录</title>
-	<header th:replace="header::html"></header>
+	<header th:replace="common/header::html"></header>
 	<link rel="stylesheet" th:href="@{/xadmin/css/login.css}" />
 </head>
 <body>
@@ -37,9 +37,10 @@
 					url : '/doLogin',
 					data : $("#login-form").serialize(),
 					success : function(res) {
-
+						console.log(res);
 						if(res.authenticated == true){
-							localStorage.setItem("userId", res.principal.id);
+							var userId = res.principal.id;
+							localStorage.setItem("userId", userId);
 							localStorage.setItem("username", res.principal.username);
 							var authorities = res.authorities;
 							var permissions = [];
@@ -47,9 +48,8 @@
 								permissions.push(authorities[i].authority);
 							}
 							localStorage.setItem("permissions", JSON.stringify(permissions));
-							layer.msg("登录成功", {time: 500}, function(){
-								location.href = '/'; // 默认会跳转到index.html
-							});
+							// layer.msg("登录成功", {time: 500}, function(){});
+							location.href = "/";
 						} else {
 							layer.msg("登录异常，请联系管理员");
 						}

@@ -23,6 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private SysPermissionMapper sysPermissionMapper;
 
+	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		SysUser user = this.sysUserMapper.queryByUsername(username);
 

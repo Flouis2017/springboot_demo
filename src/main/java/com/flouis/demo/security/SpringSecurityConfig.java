@@ -1,7 +1,9 @@
 package com.flouis.demo.security;
 
+import com.flouis.demo.security.authentication.MyAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -9,10 +11,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+
+	@Autowired
+	private MyAuthenticationSuccessHandler successHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
@@ -36,16 +42,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-				.antMatchers("/xx/login.html",
-						"/imgs/**", "/js/**", "/treetable-lay/**", "/xadmin/**", "/ztree/**",
-						"/statics/**")
-				.permitAll()
-				.anyRequest()
-				.authenticated();
+			.antMatchers("/login.html",
+					"/imgs/**",
+					"/js/**",
+					"/treetable-lay/**",
+					"/xadmin/**",
+					"/ztree/**",
+					"/statics/**")
+			.permitAll()
+			.anyRequest()
+			.authenticated();
+
+		// 解决 X-Frame-Options deny 问题
+		http.headers().frameOptions().sameOrigin();
 
 		http.formLogin()
-			.loginPage("/xx/login.html")
-			.loginProcessingUrl("/doLogin");
+			.loginPage("/login.html")
+			.loginProcessingUrl("/doLogin")
+			.successHandler(successHandler);
 	}
 
 }
