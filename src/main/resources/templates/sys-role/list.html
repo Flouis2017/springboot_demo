@@ -20,7 +20,7 @@
 							<input type="text" id="name" name="name" placeholder="请输入角色" autocomplete="off" class="layui-input">
 						</div>
 						<div class="layui-inline layui-show-xs-block">
-							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索">
+							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索" permission="sys:role:query">
 								<i class="layui-icon">&#xe615;</i>
 							</button>
 						</div>
@@ -81,7 +81,7 @@
 
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-		<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+		<button class="layui-btn layui-btn-sm" lay-event="add" permission="sys:role:edit">添加</button>
 		<button class="layui-btn layui-btn-sm" lay-event="refresh" title="刷新">
 			<i class="layui-icon layui-icon-refresh"></i>
 		</button>
@@ -89,8 +89,8 @@
 </script>
 
 <script type="text/html" id="opRow">
-	<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
-	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+	<a class="layui-btn layui-btn-mini" lay-event="edit" permission="sys:role:edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del" permission="sys:role:del">删除</a>
 </script>
 
 <script type="text/javascript">
@@ -128,7 +128,10 @@
 					{field: 'updateTimeText', title: '更新时间', align: 'center'},
 					{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
 				]
-			]
+			],
+			done: function () {
+				checkPermission();
+			}
 		});
 
 		searchForm.on("submit(search)", function (data) {

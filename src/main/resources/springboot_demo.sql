@@ -1,17 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : localhost_3306
-Source Server Version : 50719
-Source Host           : localhost:3306
-Source Database       : springboot_demo
-
-Target Server Type    : MYSQL
-Target Server Version : 50719
-File Encoding         : 65001
-
-Date: 2019-11-14 09:20:07
-*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -36,20 +22,20 @@ CREATE TABLE `sys_permission` (
 -- ----------------------------
 INSERT INTO `sys_permission` VALUES ('1', '0', '系统管理', null, '', '1', '', null);
 INSERT INTO `sys_permission` VALUES ('2', '1', '管理员列表', null, '/route/getPage?location=sys-user/list', '1', null, null);
-INSERT INTO `sys_permission` VALUES ('3', '2', '查询', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('4', '2', '添加', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('5', '2', '编辑', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('6', '2', '删除', null, null, '2', null, null);
+INSERT INTO `sys_permission` VALUES ('3', '2', '查询', null, null, '2', 'sys:user:query', null);
+INSERT INTO `sys_permission` VALUES ('4', '2', '添加', null, null, '2', 'sys:user:edit', null);
+INSERT INTO `sys_permission` VALUES ('5', '2', '编辑', null, null, '2', 'sys:user:edit', null);
+INSERT INTO `sys_permission` VALUES ('6', '2', '删除', null, null, '2', 'sys:user:del', null);
 INSERT INTO `sys_permission` VALUES ('7', '1', '角色管理', null, '/route/getPage?location=sys-role/list', '1', null, null);
-INSERT INTO `sys_permission` VALUES ('8', '7', '查询', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('9', '7', '添加', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('10', '7', '编辑', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('11', '7', '删除', null, null, '2', null, null);
+INSERT INTO `sys_permission` VALUES ('8', '7', '查询', null, null, '2', 'sys:role:query', null);
+INSERT INTO `sys_permission` VALUES ('9', '7', '添加', null, null, '2', 'sys:role:edit', null);
+INSERT INTO `sys_permission` VALUES ('10', '7', '编辑', null, null, '2', 'sys:role:edit', null);
+INSERT INTO `sys_permission` VALUES ('11', '7', '删除', null, null, '2', 'sys:role:del', null);
 INSERT INTO `sys_permission` VALUES ('12', '1', '权限管理', null, '/route/getPage?location=sys-permission/list', '1', null, null);
-INSERT INTO `sys_permission` VALUES ('13', '12', '查询', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('14', '12', '添加', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('15', '12', '编辑', null, null, '2', null, null);
-INSERT INTO `sys_permission` VALUES ('16', '12', '删除', null, null, '2', null, null);
+INSERT INTO `sys_permission` VALUES ('13', '12', '查询', null, null, '2', 'sys:permission:query', null);
+INSERT INTO `sys_permission` VALUES ('14', '12', '添加', null, null, '2', 'sys:permission:edit', null);
+INSERT INTO `sys_permission` VALUES ('15', '12', '编辑', null, null, '2', 'sys:permission:edit', null);
+INSERT INTO `sys_permission` VALUES ('16', '12', '删除', null, null, '2', 'sys:permission:del', null);
 INSERT INTO `sys_permission` VALUES ('17', '0', '测试页面', null, '/route/getPage?location=sys-common/test', '1', '', null);
 INSERT INTO `sys_permission` VALUES ('18', '0', '系统日志', null, '/route/getPage?location=sys-log/list', '1', '', null);
 
@@ -69,8 +55,8 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '根管理员', '即超级管理员', '2019-10-28 21:00:46', '2019-10-28 21:00:46');
-INSERT INTO `sys_role` VALUES ('2', '测试', '供测试使用的角色', '2019-10-28 21:03:55', '2019-11-01 10:07:15');
+INSERT INTO `sys_role` VALUES ('1', '根管理员', '即超级管理员', '2019-10-28 21:00:46', '2019-11-15 13:52:46');
+INSERT INTO `sys_role` VALUES ('2', '测试', '供测试使用的角色', '2019-10-28 21:03:55', '2019-11-15 13:52:52');
 INSERT INTO `sys_role` VALUES ('3', '开发', '随便写啦', '2019-10-28 21:04:22', '2019-10-31 10:42:26');
 
 -- ----------------------------
@@ -104,6 +90,7 @@ INSERT INTO `sys_role_permission` VALUES ('1', '14');
 INSERT INTO `sys_role_permission` VALUES ('1', '15');
 INSERT INTO `sys_role_permission` VALUES ('1', '16');
 INSERT INTO `sys_role_permission` VALUES ('1', '17');
+INSERT INTO `sys_role_permission` VALUES ('1', '18');
 INSERT INTO `sys_role_permission` VALUES ('2', '0');
 INSERT INTO `sys_role_permission` VALUES ('2', '1');
 INSERT INTO `sys_role_permission` VALUES ('2', '2');
@@ -170,7 +157,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$Egof7TGlHXvzrX7R3tHyoOmA3mMd6shrdUP4FvvoVJBevbSIRbQPS', 'obito_mangekyo.jpg', 'admin@163.com', '1', '1', '2019-10-02 20:00:00', '2019-10-02 20:00:00');
+INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$Egof7TGlHXvzrX7R3tHyoOmA3mMd6shrdUP4FvvoVJBevbSIRbQPS', 'obito_mangekyo.jpg', 'admin@163.com', '1', '1', '2019-10-02 20:00:00', '2019-11-15 13:33:32');
 INSERT INTO `sys_user` VALUES ('2', '123', '$2a$10$Egof7TGlHXvzrX7R3tHyoOmA3mMd6shrdUP4FvvoVJBevbSIRbQPS', '1570847812479.jpg', '123123123123@qq.com', '1', '1', '2019-10-04 20:39:16', '2019-10-31 10:51:26');
 INSERT INTO `sys_user` VALUES ('3', 'test', '$2a$10$Egof7TGlHXvzrX7R3tHyoOmA3mMd6shrdUP4FvvoVJBevbSIRbQPS', '1570810496048.jpeg', 'test@qq.com', '0', '1', '2019-10-04 20:42:11', '2019-10-04 20:42:11');
 INSERT INTO `sys_user` VALUES ('4', 'abcabc', '$2a$10$Egof7TGlHXvzrX7R3tHyoOmA3mMd6shrdUP4FvvoVJBevbSIRbQPS', 'default_avatar.png', 'abcabc@126.com', '1', '1', '2019-10-04 20:50:16', '2019-10-31 10:51:32');

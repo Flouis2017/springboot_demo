@@ -20,7 +20,7 @@
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
 		<button class="layui-btn layui-btn-sm" id="foldToggleBtn" lay-event="foldToggle">折叠/展开</button>
-		<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+		<button class="layui-btn layui-btn-sm" lay-event="add" permission="sys:permission:edit">添加</button>
 		<button class="layui-btn layui-btn-sm" lay-event="refresh" title="刷新">
 			<i class="layui-icon layui-icon-refresh"></i>
 		</button>
@@ -28,8 +28,8 @@
 </script>
 
 <script type="text/html" id="opRow">
-	<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
-	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+	<a class="layui-btn layui-btn-mini" lay-event="edit" permission="sys:permission:edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del" permission="sys:permission:del">删除</a>
 </script>
 
 <script type="text/javascript">
@@ -72,7 +72,10 @@
 
 						{field: 'op', title:'操作', toolbar: '#opRow', width: 150, fixed: 'right', align: 'center'}
 					]
-				]
+				],
+				done: function () {
+					checkPermission();
+				}
 			});
 		};
 

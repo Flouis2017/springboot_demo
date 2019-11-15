@@ -1,7 +1,9 @@
 package com.flouis.demo.security;
 
+import com.flouis.demo.security.authentication.AuthorityHandler;
 import com.flouis.demo.security.authentication.MyAuthenticationFailureHandler;
 import com.flouis.demo.security.authentication.MyAuthenticationSuccessHandler;
+import com.flouis.demo.security.authentication.MyLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private MyAuthenticationFailureHandler failureHandler;
+
+	@Autowired
+	private MyLogoutSuccessHandler logoutSuccessHandler;
+
+	@Autowired
+	private AuthorityHandler authorityHandler;
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
@@ -64,7 +72,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/login.html")
 			.loginProcessingUrl("/doLogin")
 			.successHandler(successHandler)
-			.failureHandler(failureHandler);
+//			.failureHandler(failureHandler)
+			.and()
+			.logout().permitAll().invalidateHttpSession(true)
+			.deleteCookies("JSESSIONID")
+			.logoutSuccessHandler(logoutSuccessHandler);
+
+		// 异常处理——增加授权异常处理
+		http.exceptionHandling().accessDeniedHandler(authorityHandler);
 	}
 
 }

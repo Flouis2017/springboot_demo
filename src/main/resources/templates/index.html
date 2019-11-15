@@ -38,7 +38,7 @@
 	</ul>
 	<ul class="layui-nav right" lay-filter="">
 		<li class="layui-nav-item">
-			<a href="javascript:;">admin</a>
+			<a href="javascript:;" id="show-username">admin</a>
 			<dl class="layui-nav-child">
 				<!-- 二级菜单 -->
 				<dd>
@@ -46,7 +46,9 @@
 				<dd>
 					<a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
 				<dd>
-					<a href="./login.html">退出</a></dd>
+					<a href="/logout">退出</a>
+					<!-- 使用SpringSecurity默认拦截，这个/logout不用我们去控制层去配，是SpringSecurity自带的一个登出请求 -->
+				</dd>
 			</dl>
 		</li>
 		<li class="layui-nav-item to-index">
@@ -236,6 +238,9 @@
 	}
 
 $(function () {
+	var username = localStorage.getItem("username");
+	$('#show-username').text((username != null && username != undefined) ? username : "---");
+
 	var userId = localStorage.userId;
 	var menu = new Menu("nav", userId);
 	menu.init();

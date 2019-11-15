@@ -8,6 +8,7 @@ import com.flouis.demo.vo.SysRoleVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class SysRoleController {
 	 */
 	@RequestMapping("/list.json")
 	@ResponseBody
+	@PreAuthorize("hasAuthority('sys:role:query')")
 	public TableResult list(SysRoleVo vo){
 		Page page = PageHelper.startPage(vo.getPage(), vo.getLimit());
 		this.sysRoleService.queryList(vo);
@@ -41,9 +43,10 @@ public class SysRoleController {
 	}
 
 	/**
-	 * @description 角色编辑页标砖
+	 * @description 角色编辑页跳转
 	 */
 	@RequestMapping("/edit")
+	@PreAuthorize("hasAuthority('sys:role:edit')")
 	public String edit(Model model, Long id){
 		SysRole sysRole;
 		if (id == null){
@@ -69,6 +72,7 @@ public class SysRoleController {
 	 */
 	@RequestMapping("/del")
 	@ResponseBody
+	@PreAuthorize("hasAuthority('sys:role:del')")
 	public JsonResult del(Long id){
 		return this.sysRoleService.del(id);
 	}

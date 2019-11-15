@@ -24,7 +24,7 @@
 						</div>
 
 						<div class="layui-inline layui-show-xs-block">
-							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索">
+							<button class="layui-btn" lay-submit="" lay-filter="search" title="搜索" permission="sys:user:query">
 								<i class="layui-icon">&#xe615;</i>
 							</button>
 						</div>
@@ -39,7 +39,7 @@
 
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-		<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+		<button class="layui-btn layui-btn-sm" lay-event="add" permission="sys:user:edit">添加</button>
 		<button class="layui-btn layui-btn-sm" lay-event="refresh" title="刷新">
 			<i class="layui-icon layui-icon-refresh"></i>
 		</button>
@@ -47,8 +47,8 @@
 </script>
 
 <script type="text/html" id="opRow">
-	<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
-	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+	<a class="layui-btn layui-btn-mini" lay-event="edit" permission="sys:user:edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del" permission="sys:user:del">删除</a>
 </script>
 
 <script type="text/javascript">
@@ -99,7 +99,10 @@ layui.use(['table', 'form'], function () {
 				// {field: 'updateTimeText', title: '更新时间', align: 'center'},
 				{field: 'op', title:'操作', toolbar: '#opRow', fixed: 'right', width:150, align: 'center'}
 			]
-		]
+		],
+		done: function () {
+			checkPermission();
+		}
 	});
 
 	searchForm.on("submit(search)", function (data) {
@@ -156,7 +159,7 @@ function changeState(id, state){
 					}
 				},
 				error: function () {
-					layer.msg("Network Error! Please try again later!", {icon: 5, time: 2000});
+					layer.msg("权限缺失!", {icon: 5, time: 2000});
 				}
 			});
 		}

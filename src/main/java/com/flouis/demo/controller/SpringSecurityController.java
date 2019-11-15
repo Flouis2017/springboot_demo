@@ -35,4 +35,9 @@ public class SpringSecurityController {
 		return JsonResult.success(array);
 	}
 
+	@GetMapping("/authority_error.html")
+	public String authorityErrorHtml(){
+		return "error/authority_error";
+	}
+
 }

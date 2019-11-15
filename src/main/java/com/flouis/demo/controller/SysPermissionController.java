@@ -5,6 +5,7 @@ import com.flouis.demo.entity.SysPermission;
 import com.flouis.demo.entity.SysRolePermission;
 import com.flouis.demo.service.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +54,7 @@ public class SysPermissionController {
 	 */
 	@RequestMapping("/queryAll")
 	@ResponseBody
+	@PreAuthorize("hasAuthority('sys:permission:query')")
 	public JsonResult queryAll(){
 		return JsonResult.success(this.sysPermissionService.queryAll());
 	}
@@ -61,6 +63,7 @@ public class SysPermissionController {
 	 * @description 跳转至添加/编辑页
 	 */
 	@RequestMapping("/edit")
+	@PreAuthorize("hasAuthority('sys:permission:edit')")
 	public String edit(Model model, Long id){
 		SysPermission sysPermission;
 		if (id == null){
@@ -96,6 +99,7 @@ public class SysPermissionController {
 	 */
 	@RequestMapping("/del")
 	@ResponseBody
+	@PreAuthorize("hasAuthority('sys:permission:del')")
 	public JsonResult del(Long id){
 		return this.sysPermissionService.del(id);
 	}

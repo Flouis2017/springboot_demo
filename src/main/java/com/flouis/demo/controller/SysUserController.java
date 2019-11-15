@@ -11,6 +11,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ public class SysUserController {
 	 */
 	@RequestMapping("/list.json")
 	@ResponseBody
+	@PreAuthorize("hasAuthority('sys:user:query')")
 	public TableResult list(SysUserVo vo){
 		log.info("request param: " + vo.toString());
 		Page page = PageHelper.startPage(vo.getPage(), vo.getLimit());
@@ -47,6 +49,7 @@ public class SysUserController {
 	 * @description 编辑页-添加/编辑弹窗
 	 */
 	@RequestMapping("/edit")
+	@PreAuthorize("hasAuthority('sys:user:edit')")
 	public String edit(Model model, SysUser editObj){
 		List<SysRole> roleList = this.sysRoleService.queryAll();
 		model.addAttribute("roleList", roleList);
@@ -71,6 +74,7 @@ public class SysUserController {
 	 */
 	@PostMapping("/changeState")
 	@ResponseBody
+	@PreAuthorize("hasAuthority('sys:user:del')")
 	public JsonResult changeState(Long id, Integer state){
 		return this.sysUserService.changeState(id, state);
 	}
