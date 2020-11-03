@@ -129,4 +129,15 @@ public class SysUser {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "SysUser {avatar=" + avatar + ", createTime=" + createTime + ", createTimeText=" + createTimeText
+                + ", email=" + email + ", gender=" + gender + ", id=" + id + ", password=" + password + ", roleId="
+                + roleId + ", roleName=" + roleName + ", state=" + state + ", updateTime=" + updateTime
+                + ", updateTimeText=" + updateTimeText + ", username=" + username + "}";
+    }
+
+        
+
 }

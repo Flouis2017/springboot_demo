@@ -29,7 +29,7 @@ public class MyBatisTest {
 	@Test
 	public void queryTest(){
 		SysUser sysUser = this.sysUserMapper.selectByPrimaryKey(1L);
-		System.out.println(sysUser.toString());
+		System.out.println("queryTest -->\n" + sysUser.toString());
 	}
 
 	@Test

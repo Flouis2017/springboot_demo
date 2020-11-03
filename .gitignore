@@ -1,34 +1,57 @@
-# java
-*.class
 
-# package file
-*.war
-*.ear
+logs/
 
-# maven ignore
 target/
-/target/
+*/target/
+**/target/
 
-# eclipse ignore
-.settings/
-.project
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+*/.apt_generated
+**/.apt_generated
+
 .classpath
+*/.classpath
+**/.classpath
 
-# idea ignore
-.idea/
-/idea/
-*.ipr
-*.iml
+.factorypath
+*/.factorypath
+**/.factorypath
+
+.project
+*/.project
+**/.project
+
+.settings
+*/.settings
+**/.settings
+
+.springBeans
+*/.springBeans
+**/.springBeans
+
+.sts4-cache
+*/.sts4-cache
+**/.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
 *.iws
+*.iml
+*.ipr
 
-# temp file
-*.log
-*.cache
-*.diff
-*.patch
-*.path
-*.tmp
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
 
-# system ignore
-.DS_Store
-Thumbs.db
+### VS Code ###
+.vscode/
+
